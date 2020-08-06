@@ -10,6 +10,10 @@ namespace AccountTrackerConsoleApp
     {
         static void Main(string[] args)
         {
+
+            Console.WriteLine("Yo");
+            Console.Read();
+
         }
     }
 }
