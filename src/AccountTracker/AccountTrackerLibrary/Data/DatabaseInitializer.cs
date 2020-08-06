@@ -14,6 +14,20 @@ namespace AccountTrackerLibrary.Data
     {
         //Insert seed data for the database here.
 
+        protected override void Seed(Context context)
+        {
+            var transaction1 = new Transaction()
+            {
+                TransactionDate = DateTime.Now,
+                Amount = 112.52M,
+                TransactionTypeID = 1,
+                AccountID = 1,
+                CategoryID = 1
+            };
+
+            context.Transactions.Add(transaction1);
+            context.SaveChanges();
+        }
 
     }
 }

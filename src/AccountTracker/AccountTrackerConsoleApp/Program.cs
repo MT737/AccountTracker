@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AccountTrackerConsoleApp.Data;
+
 
 namespace AccountTrackerConsoleApp
 {
@@ -10,9 +12,18 @@ namespace AccountTrackerConsoleApp
     {
         static void Main(string[] args)
         {
+            
+            var transactions = Repository.GetTransactionsList();
 
-            Console.WriteLine("Yo");
+            foreach (var transaction in transactions)
+            {
+                Console.WriteLine($"Transaction Amount: {transaction.Amount} Transaction Account: {transaction.Account}");
+            }
+
+            Console.WriteLine("meh");
             Console.Read();
+
+
 
         }
     }
