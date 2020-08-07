@@ -11,7 +11,7 @@ namespace AccountTrackerLibrary.Data
     /// <summary>
     /// Custom database initializer class used to populate the database with seed data.
     /// </summary>
-    internal class DatabaseInitializer : DropCreateDatabaseIfModelChanges<Context>
+    internal class DatabaseInitializer : DropCreateDatabaseAlways<Context>
     {
         //Insert seed data for the database here.
 
@@ -73,9 +73,7 @@ namespace AccountTrackerLibrary.Data
             };
 
             context.Transactions.Add(transaction1);
-            //context.SaveChanges();
-            base.Seed(context);
+            context.SaveChanges();
         }
-
     }
 }

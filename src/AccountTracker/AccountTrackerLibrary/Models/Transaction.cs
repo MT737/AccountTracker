@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace AccountTrackerLibrary
 {
     public class Transaction
     {
-        //Properties
+        //Properties    
         public int TransactionID { get; set; }
 
         [Required]
