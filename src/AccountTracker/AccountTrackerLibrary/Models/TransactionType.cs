@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace AccountTrackerLibrary.Models
 {
-    public class TransType
+    public class TransactionType
     {
         //Properties
-        public int TransTypeID { get; set; }
+        public int TransactionTypeID { get; set; }
         
         [Required, StringLength(100)]
         public string Name { get; set; }
@@ -19,7 +19,7 @@ namespace AccountTrackerLibrary.Models
         public ICollection<Transaction> Transactions { get; set; }
 
         //Instantiation of navigation collection.
-        public TransType()
+        public TransactionType()
         {
             Transactions = new List<Transaction>();
         }

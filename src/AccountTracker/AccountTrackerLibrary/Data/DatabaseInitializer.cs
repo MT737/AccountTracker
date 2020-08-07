@@ -19,61 +19,56 @@ namespace AccountTrackerLibrary.Data
         {
 
             //Filling in default categories.
-
-            var shopping = new Category()
-            {
-                Name = "Shopping",
-                IsDefault = true,
-                IsActive = true
-            };
-            context.Categories.Add(shopping);
-
-            var eatingOut = new Category()
-            {
-                Name = "Eating Out",
-                IsDefault = true,
-               IsActive = true
-            };
-            context.Categories.Add(eatingOut);
-
-            var gas = new Category()
-            {
-                Name = "Gas",
-                IsDefault = true,
-                IsActive = true
-            };
-            context.Categories.Add(gas);
+            IList<Category> categories = new List<Category>();
+            categories.Add(new Category() { Name = "Shopping", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Eating out", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Gas", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Groceries/Sundries", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Entertainment", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Returns/Deposits", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "ATM Withdrawal", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Other", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "New Account", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Account Correction", IsActive = true, IsDefault = true });
+            context.Categories.AddRange(categories);
 
             //Filling default vendors
-            var vendor = new Vendor()
-            {
-                Name = "Lowe's",
-                IsDefault = true
-            };
-            context.Vendors.Add(vendor);
+            IList<Vendor> vendors = new List<Vendor>();
+            vendors.Add(new Vendor() { Name = "Lowe's", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "Food Lion", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "Marshalls", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "Harris Teeter", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "Amazon", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "Duke Power", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "IMPLAN", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "Armstrong Transportation", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "ABC", IsDefault = true });
+            context.Vendors.AddRange(vendors);
+
+            //Filling default TransTypes
+            IList<TransactionType> transTypes = new List<TransactionType>();
+            transTypes.Add(new TransactionType() { Name = "Payment To" });
+            transTypes.Add(new TransactionType() { Name = "Payment From" });
+            context.TransTypes.AddRange(transTypes);
 
 
-            //Filling test account
-            var account = new Account()
-            {
-                Name = "Bank of America: Checking",
-                IsAsset = true,
-                IsActive = true
-            };
-            context.Accounts.Add(account);
-
-            //Filling test transactions
-            var transaction1 = new Transaction()
-            {
-                TransactionDate = DateTime.Now,
-                Amount = 112.52M,
-                TransactionTypeID = 1,
-                AccountID = 1,
-                CategoryID = 1
-            };
-
-            context.Transactions.Add(transaction1);
+            //Filling test accounts
+            IList<Account> accounts = new List<Account>();
+            accounts.Add(new Account() { Name = "Bank of America: Checking", IsActive = true, IsAsset = true });
+            accounts.Add(new Account() { Name = "Fifth Third: Credit Card", IsActive = true, IsAsset = false });
+            accounts.Add(new Account() { Name = "Amazon: Credit Card", IsActive = true, IsAsset = false });
+            accounts.Add(new Account() { Name = "Havery's: Interest Free Loan", IsActive = true, IsAsset = false });            
+            context.Accounts.AddRange(accounts);
+            
+            //Must save the seed data for the primary keys to the DB before inserting transaction data. Otherwise EF will try to insert transaction data before primary data is inserted.            
             context.SaveChanges();
+
+            ////Filling test transactions
+            IList<Transaction> transactions = new List<Transaction>();
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Now, Amount = 5282.52M, TransactionTypeID = 1, AccountID = 1, CategoryID = 9, VendorID = 7 });
+            context.Transactions.AddRange(transactions);
+
+            base.Seed(context);
         }
     }
 }

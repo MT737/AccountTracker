@@ -19,6 +19,7 @@ namespace AccountTrackerLibrary.Models
         [Required]
         public bool IsDefault { get; set; }
 
+       
         //Navigation Property
         public ICollection<Transaction> Transactions { get; set; }
 

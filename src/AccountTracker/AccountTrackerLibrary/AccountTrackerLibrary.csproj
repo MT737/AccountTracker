@@ -57,12 +57,12 @@
     <Compile Include="Data\Context.cs" />
     <Compile Include="Data\DatabaseInitializer.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
-    <Compile Include="Data\TransTypeRepository.cs" />
+    <Compile Include="Data\TransactionTypeRepository.cs" />
     <Compile Include="Data\VendorRepository.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Transaction.cs" />
-    <Compile Include="Models\TransType.cs" />
+    <Compile Include="Models\TransactionType.cs" />
     <Compile Include="Models\Vendor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

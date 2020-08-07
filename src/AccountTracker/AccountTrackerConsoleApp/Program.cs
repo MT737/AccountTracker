@@ -17,10 +17,10 @@ namespace AccountTrackerConsoleApp
 
             foreach (var transaction in translist)
             {
-                Console.WriteLine($"Transaction Amount: {transaction.Amount} Transaction Account: {transaction.AccountID}");
+                Console.WriteLine($"{transaction.TransactionType.Name} {transaction.Account.Name}. Amount: {transaction.Amount}. Category: {transaction.Category.Name} " +
+                    $"Vendor: {transaction.Vendor.Name}. Transaction date: {transaction.TransactionDate}  Description: {transaction.Description}");
             }
 
-            Console.WriteLine("meh");
             Console.Read();
         }
     }
