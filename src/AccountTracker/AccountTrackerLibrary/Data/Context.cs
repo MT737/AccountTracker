@@ -22,7 +22,8 @@ namespace AccountTrackerLibrary.Data
 
 
         //DBInitializer for this context class is set in the config file. As no further constructor specifications required, no consructor is present.        
-            
+
+
         /// <summary>
         /// Adjusting model build conventions to fit application needs.
         /// </summary>

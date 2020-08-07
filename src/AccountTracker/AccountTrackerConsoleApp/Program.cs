@@ -12,19 +12,15 @@ namespace AccountTrackerConsoleApp
     {
         static void Main(string[] args)
         {
-            
             var transactions = Repository.GetTransactionsList();
 
             foreach (var transaction in transactions)
             {
-                Console.WriteLine($"Transaction Amount: {transaction.Amount} Transaction Account: {transaction.Account}");
+                Console.WriteLine($"Transaction Amount: {transaction.Amount} Transaction Account: {transaction.AccountID}");
             }
 
             Console.WriteLine("meh");
             Console.Read();
-
-
-
         }
     }
 }
