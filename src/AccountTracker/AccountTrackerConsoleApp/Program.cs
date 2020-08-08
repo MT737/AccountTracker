@@ -1,27 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AccountTrackerConsoleApp.Helpers;
 using AccountTrackerLibrary.Data;
 
 namespace AccountTrackerConsoleApp
 {
     class Program
     {
+        //Various commands that can be performed.        
+        const string CommandListTransactions = "t";
+        const string CommandListAccounts = "a";
+        const string CommandListCategories = "c";
+        const string CommandListVendors = "v";
+        const string CommandQuit = "q";
+
         static void Main(string[] args)
-        {
-            var context = new Context();
-            var transactionRepo = new TransactionRepository(context);
-            var translist = transactionRepo.GetList();
+        {         
+            //Default to the transactions list.
+            string command = CommandListTransactions;
 
-            foreach (var transaction in translist)
+            while (command != CommandQuit)
             {
-                Console.WriteLine($"{transaction.TransactionType.Name} {transaction.Account.Name}. Amount: {transaction.Amount}. Category: {transaction.Category.Name} " +
-                    $"Vendor: {transaction.Vendor.Name}. Transaction date: {transaction.TransactionDate}  Description: {transaction.Description}");
-            }
+                switch (command)
+                {
+                    case CommandListTransactions:
+                        //TODO: call helper method to pull transactions?
+                        ConsoleHelper.ListTransactions();
+                        break;
+                    default: //TODO: Call helper method to pull transactions? Going to have the transactions list as the default.
+                        ConsoleHelper.ListTransactions();
+                        break;
+                }
 
-            Console.Read();
+                //List the available commands.
+                ConsoleHelper.OutputBlankLine();
+                ConsoleHelper.Output("Commands: ");
+                var transactionCount = ConsoleHelper.GetTransactionCount();
+                if (transactionCount > 0)
+                {
+                    ConsoleHelper.Output($"Enter a number 1-{transactionCount},");
+                }
+                ConsoleHelper.OutputLine("putcommandshere. Just hit t for now or q to quite", false);
+
+                //Get command from the user.
+                command = ConsoleHelper.ReadInput("Enter a Command: ", true);
+            }
         }
     }
 }

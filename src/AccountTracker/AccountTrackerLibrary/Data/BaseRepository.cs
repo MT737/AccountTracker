@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AccountTrackerLibrary.Data
 {
@@ -20,6 +16,8 @@ namespace AccountTrackerLibrary.Data
         public abstract IList<TEntity> GetList();
 
         //TODO: Create CRUD functions
+
+        public abstract int GetCount();
 
     }
 }

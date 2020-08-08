@@ -24,5 +24,10 @@ namespace AccountTrackerLibrary.Data
         {
             throw new NotImplementedException();
         }
+
+        public override int GetCount()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

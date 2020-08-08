@@ -29,5 +29,10 @@ namespace AccountTrackerLibrary.Data
                 .OrderBy(t => t.TransactionDate)
                 .ToList();
         }
+
+        public override int GetCount()
+        {
+            return Context.Transactions.Count();
+        }
     }
 }
