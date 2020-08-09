@@ -17,7 +17,7 @@ namespace AccountTrackerLibrary.Data
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionType> TransTypes { get; set; }
+        public DbSet<TransactionType> TransactionTypes { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
 
 

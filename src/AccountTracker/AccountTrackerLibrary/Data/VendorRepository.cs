@@ -23,12 +23,14 @@ namespace AccountTrackerLibrary.Data
         //TODO Implement Vendor list
         public override IList<Vendor> GetList()
         {
-            throw new NotImplementedException();
+            return Context.Vendors
+                .OrderBy(v => v.Name)
+                .ToList();
         }
         
         public override int GetCount()
         {
-            throw new NotImplementedException();
+            return Context.Vendors.Count();
         }
     }
 }

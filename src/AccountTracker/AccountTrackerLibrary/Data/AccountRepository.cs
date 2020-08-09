@@ -22,12 +22,14 @@ namespace AccountTrackerLibrary.Data
         //TODO Implement Account GetList
         public override IList<Account> GetList()
         {
-            throw new NotImplementedException();
+            return Context.Accounts
+                .OrderBy(a => a.Name)
+                .ToList();
         }
 
         public override int GetCount()
         {
-            throw new NotImplementedException();
+            return Context.Accounts.Count();
         }
     }
 }

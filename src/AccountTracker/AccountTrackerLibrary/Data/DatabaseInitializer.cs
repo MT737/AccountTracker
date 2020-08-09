@@ -11,7 +11,7 @@ namespace AccountTrackerLibrary.Data
     /// <summary>
     /// Custom database initializer class used to populate the database with seed data.
     /// </summary>
-    internal class DatabaseInitializer : DropCreateDatabaseAlways<Context>
+    internal class DatabaseInitializer : DropCreateDatabaseIfModelChanges<Context>
     {
         //Insert seed data for the database here.
 
@@ -30,6 +30,7 @@ namespace AccountTrackerLibrary.Data
             categories.Add(new Category() { Name = "Other", IsActive = true, IsDefault = true });
             categories.Add(new Category() { Name = "New Account", IsActive = true, IsDefault = true });
             categories.Add(new Category() { Name = "Account Correction", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Account Transfer", IsActive = true, IsDefault = true });
             context.Categories.AddRange(categories);
 
             //Filling default vendors
@@ -43,13 +44,14 @@ namespace AccountTrackerLibrary.Data
             vendors.Add(new Vendor() { Name = "IMPLAN", IsDefault = true });
             vendors.Add(new Vendor() { Name = "Armstrong Transportation", IsDefault = true });
             vendors.Add(new Vendor() { Name = "ABC", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "N/A", IsDefault = true });
             context.Vendors.AddRange(vendors);
 
             //Filling default TransTypes
             IList<TransactionType> transTypes = new List<TransactionType>();
             transTypes.Add(new TransactionType() { Name = "Payment To" });
             transTypes.Add(new TransactionType() { Name = "Payment From" });
-            context.TransTypes.AddRange(transTypes);
+            context.TransactionTypes.AddRange(transTypes);
 
 
             //Filling test accounts
@@ -65,7 +67,11 @@ namespace AccountTrackerLibrary.Data
 
             ////Filling test transactions
             IList<Transaction> transactions = new List<Transaction>();
-            transactions.Add(new Transaction() { TransactionDate = DateTime.Now, Amount = 5282.52M, TransactionTypeID = 1, AccountID = 1, CategoryID = 9, VendorID = 7 });
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 5282.52M, TransactionTypeID = 1, AccountID = 1, CategoryID = 9, VendorID = 7, Description = "Initial Account Balance" });
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 521.36M, TransactionTypeID = 2, AccountID = 1, CategoryID = 1, VendorID = 1, Description = "Lowe's shopping" });
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 2, AccountID = 2, CategoryID = 3, VendorID = 9 , Description = "Gas on Amazon card"});
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 1, AccountID = 2, CategoryID = 11, VendorID = 10, Description = "Paying off Amazon with BofA"});
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 2, AccountID = 1, CategoryID = 11, VendorID = 10, Description = "Paying off Amazon with BofA"});
             context.Transactions.AddRange(transactions);
 
             base.Seed(context);

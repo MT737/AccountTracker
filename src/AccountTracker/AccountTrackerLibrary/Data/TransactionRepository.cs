@@ -16,7 +16,20 @@ namespace AccountTrackerLibrary.Data
         //TODO Implement Transaction get
         public override Transaction Get(int id, bool includeRelatedEntities = true)
         {
-            throw new NotImplementedException();
+            var transaction = Context.Transactions.AsQueryable();
+
+            if (includeRelatedEntities)
+            {
+                transaction = transaction
+                    .Include(tt => tt.TransactionType)
+                    .Include(a => a.Account)
+                    .Include(c => c.Category)
+                    .Include(v => v.Vendor);
+            }
+
+            return transaction                
+                .Where(t => t.TransactionID == id)
+                .SingleOrDefault();
         }
 
         public override IList<Transaction> GetList()
@@ -24,9 +37,7 @@ namespace AccountTrackerLibrary.Data
             return Context.Transactions
                 .Include(tt => tt.TransactionType)
                 .Include(a => a.Account)
-                .Include(v => v.Vendor)
-                .Include(c => c.Category)
-                .OrderBy(t => t.TransactionDate)
+                .OrderByDescending(t => t.TransactionID)
                 .ToList();
         }
 

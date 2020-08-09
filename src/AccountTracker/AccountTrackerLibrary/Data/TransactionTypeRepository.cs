@@ -19,15 +19,16 @@ namespace AccountTrackerLibrary.Data
             throw new NotImplementedException();
         }
 
-        //TODO Implement TransType get list???
         public override IList<TransactionType> GetList()
         {
-            throw new NotImplementedException();
+            return Context.TransactionTypes
+                .OrderBy(t => t.TransactionTypeID)
+                .ToList();
         }
 
         public override int GetCount()
         {
-            throw new NotImplementedException();
+            return Context.TransactionTypes.Count();
         }
     }
 }
