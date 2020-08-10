@@ -66,7 +66,7 @@ namespace AccountTrackerConsoleApp.Helpers
             }
         }
 
-        public static void ListAccounts()
+        public static void ListAccounts(List<int> accountIds)
         {
             ClearOutput();
             OutputLine("ACCOUNTS:");
@@ -77,11 +77,10 @@ namespace AccountTrackerConsoleApp.Helpers
                 var accounts = accountRepository.GetList();
                 if (accounts.Count > 0)
                 {
-                    var accountCount = 0;
                     foreach (var account in accounts)
                     {
-                        accountCount++;
-                        Console.WriteLine($"{accountCount}) {account.Name}");
+                        accountIds.Add(account.AccountID);
+                        Console.WriteLine($"{accounts.IndexOf(account) +1}) {account.Name}");
                     }
                 }
                 else
@@ -186,15 +185,36 @@ namespace AccountTrackerConsoleApp.Helpers
             return forceLowerCase ? input.ToLower() : input;
         }
 
-        public static int GetTransactionCount()
-        {
-            using(var context = GetContext())
-            {
-                var _transactionsRepository = new TransactionRepository(context);
-                var transactions = _transactionsRepository.GetList();
 
-                return _transactionsRepository.GetCount();
-            }            
+        //TODO: XML
+        public static int? GetListCount(string listName)
+        {
+            using (var context = GetContext())
+            {
+                switch (listName)
+                {
+                    case "Transaction":
+                        var transactionRepository = new TransactionRepository(context);
+                        return transactionRepository.GetCount();
+                    case "TransactionType":
+                        var transactionTypeRepository = new TransactionTypeRepository(context);
+                        return transactionTypeRepository.GetCount();
+                    case "Account":
+                        var accountRepository = new AccountRepository(context);
+                        return accountRepository.GetCount();
+                    case "Vendor":
+                        var vendorRepository = new VendorRepository(context);
+                        return vendorRepository.GetCount();
+                    case "Category":
+                        var categoryRepository = new CategoryRepository(context);
+                        return categoryRepository.GetCount();
+                    default:
+                        ConsoleHelper.OutputLine("Error! Passed ListName not found. Close the program and troubleshoot.", true);
+                        Console.ReadLine();
+                        Environment.Exit(0); //Not a true 0 code for environment exit, but a message has been provided and the console app is not for production release.
+                        return null;        //Only inlcuding a return null in order to satisfy Visual Studio.
+                }
+            }
         }
     }
 }

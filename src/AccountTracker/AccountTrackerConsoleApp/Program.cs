@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AccountTrackerConsoleApp.Helpers;
+using AccountTrackerLibrary;
 using AccountTrackerLibrary.Data;
 
 namespace AccountTrackerConsoleApp
@@ -37,19 +39,19 @@ namespace AccountTrackerConsoleApp
                         command = CommandMainScreen;
                         continue;
                     case CommandListAccounts:
-                        ConsoleHelper.ListAccounts();
+                        //ConsoleHelper.ListAccounts();
                         break;
                     case CommandListCategories:
-                        ConsoleHelper.ListCategories();
+                        //ConsoleHelper.ListCategories();
                         break;
                     case CommandListVendors:
-                        ConsoleHelper.ListVendors();
+                        //ConsoleHelper.ListVendors();
                         break;
                     case "welcome":
-                        ConsoleHelper.Output("Welcome to the AccountTracker console app.");
+                        //ConsoleHelper.Output("Welcome to the AccountTracker console app.");
                         break;
                     case CommandMainScreen:
-                        ConsoleHelper.ClearOutput();
+                        //ConsoleHelper.ClearOutput();
                         break;
                     default: 
                         break;
@@ -78,7 +80,7 @@ namespace AccountTrackerConsoleApp
                         ConsoleHelper.ListTransactions(transactionIds);
                         break;
                     case CommandAdd:
-                        //TODO: Implement add transaction.
+                        AddTransaction();
                         command = CommandListTransactions;
                         continue;
                     default:
@@ -97,17 +99,178 @@ namespace AccountTrackerConsoleApp
                 //List the available commands.
                 ConsoleHelper.OutputBlankLine();
                 ConsoleHelper.Output("Commands: ");
-                var transactionCount = ConsoleHelper.GetTransactionCount();
+                var transactionCount = ConsoleHelper.GetListCount("Transaction");
                 if (transactionCount > 0)
                 {
                     ConsoleHelper.Output($"Enter a number 1-{transactionCount} for a detialed view,");
                 }
-                ConsoleHelper.OutputLine("m - return to detailed screen", false);
+                ConsoleHelper.OutputLine("a - add transaction, m - return to detailed screen", false);
                 
                 //Get the command from the user.
                 command = ConsoleHelper.ReadInput("Enter a command: ", forceLowerCase: true);
             }
         }
+
+        public static void AddTransaction()
+        {
+            //pull inputs from user
+            var transaction = new Transaction();
+            var haltProcess = false;
+            int? inputId;
+
+            while (!haltProcess)
+            {
+                //Date
+                DateTime? transDate = GetTransactionDate();
+                if (transDate == null)
+                {
+                    haltProcess = true;
+                    continue;
+                }
+                transaction.TransactionDate = transDate.Value;
+
+                //Get TransactionType ID by listing type options for the user
+                inputId = GetTransactionTypeID();
+                if (inputId == null)
+                {
+                    haltProcess = true;
+                    continue;
+                }
+                transaction.TransactionTypeID = inputId.Value;
+
+                //Get Account by listing type options for the user
+                inputId = GetAccountID();
+                if (inputId == null)
+                {
+                    haltProcess = true;
+                    continue;
+                }                
+                transaction.AccountID = inputId.Value;
+
+                //Get amount (ensure the value is currency)
+                transaction.Amount = GetAmount();
+
+                //Get Category by listing type options for the user
+                transaction.CategoryID = GetCategoryID();
+
+                //Get Vendor by listing type options for the user
+                transaction.VendorID = GetVendorID();
+
+                //Get description (ensure the text is within bounds) Test EF's sql injection protection by trying to use drop table
+                transaction.Description = GetDescription(); 
+            }
+        }
+
+        /// <summary>
+        /// Prompts the user to enter a date and validates the input.
+        /// </summary>
+        /// <returns>Returns a DateTime object with a date value if the user provides a valid date value or null if the user cancels.</returns>
+        private static DateTime? GetTransactionDate()
+        {
+            string command = "get value";
+
+            while (true)
+            {
+                switch (command)
+                {
+                    case CommandReturn:
+                        return null;
+                    case "get value":
+                        ConsoleHelper.ClearOutput();
+                        ConsoleHelper.Output("DATE");
+                        break;
+                    default:
+                        ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
+                        break;
+                }
+
+                //Request user input
+                ConsoleHelper.OutputLine("Enter a date or enter r - to return to transactions list.");
+                ConsoleHelper.OutputLine("Date format example - 10/22/2018");
+
+                //Confirm input
+                command = ConsoleHelper.ReadInput("Date", true);
+                DateTime inputtedData;
+                DateTime.TryParse(command, out inputtedData);
+                if (inputtedData != DateTime.MinValue)
+                {
+                    return inputtedData.Date;
+                }
+            }            
+        }
+
+        //TODO: Implement
+        private static int? GetTransactionTypeID()
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO: Implement
+        private static int? GetAccountID()
+        {
+            string command = "get value";            
+            List<int> accountIds = null;
+
+            while (true)
+            {
+                switch (command)
+                {
+                    case CommandReturn:
+                        return null;
+                    case "get value":
+                        ConsoleHelper.ListAccounts(accountIds);
+                        break;
+                    default:
+                        if (InputConfirmed(command, accountIds))
+                        {
+                            return accountIds[int.Parse(command) - 1];
+                        }
+                        else
+                        {
+                            ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
+                        }
+                        break;
+                }
+
+                //List the available commands.
+                ConsoleHelper.OutputBlankLine();
+                ConsoleHelper.Output("Commands: ");
+                var accountCount = ConsoleHelper.GetListCount("Account");
+                if (accountCount > 0)
+                {
+                    ConsoleHelper.Output($"Select 1-{accountCount} or,");
+                }
+                ConsoleHelper.OutputLine("r - return to detailed screen", false);
+
+                //Get the command from the user.
+                command = ConsoleHelper.ReadInput("Enter a command: ", forceLowerCase: true);
+            }
+        }
+
+        //TODO: Implement
+        private static string GetDescription()
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO: Implement
+        private static int GetVendorID()
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO: Implement
+        private static int GetCategoryID()
+        {
+            throw new NotImplementedException();
+        }
+
+        //TODO: Implement
+        private static decimal GetAmount()
+        {
+            throw new NotImplementedException();
+        }
+
 
         public static bool AttempDisplayTransaction(List<int> transactionIds, string command)
         {
@@ -169,6 +332,33 @@ namespace AccountTrackerConsoleApp
                 //Get command from user.
                 command = ConsoleHelper.ReadInput("Enter a command: ", true);
             }
+        }
+
+        public static bool InputConfirmed(string command, List<int> ids)
+        {
+            var successful = false;
+
+            //Check that the list of Ids is not null.
+            if (ids != null)
+            {
+                //Attempt to parse the command to a line number.
+                int lineNumber = 0;
+                int.TryParse(command, out lineNumber);
+
+                //If the line number is within the range, then input confirmed.
+                if (lineNumber > 0 && lineNumber <= ids.Count)
+                {
+                    successful = true;
+                }
+            }
+
+            if (ids == null)
+            {
+                ConsoleHelper.OutputLine("Error! Id list is null. Close program and troubleshoot.", true);
+                Environment.Exit(0); //Not a true 0 code for environment exit, but a message has been provided and the console app is not for production release.
+            }
+
+            return successful;
         }
 
     }
