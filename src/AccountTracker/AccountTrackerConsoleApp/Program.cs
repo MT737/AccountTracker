@@ -100,11 +100,12 @@ namespace AccountTrackerConsoleApp
                 ConsoleHelper.OutputBlankLine();
                 ConsoleHelper.Output("Commands: ");
                 var transactionCount = ConsoleHelper.GetListCount("Transaction");
+                string message = "";
                 if (transactionCount > 0)
                 {
-                    ConsoleHelper.Output($"Enter a number 1-{transactionCount} for a detialed view,");
+                    message = $"Select transaction from 1-{transactionCount} or ";
                 }
-                ConsoleHelper.OutputLine("a - add transaction, m - return to detailed screen", false);
+                ConsoleHelper.Output($"{message}a - add transaction, m - return to detailed screen");
                 
                 //Get the command from the user.
                 command = ConsoleHelper.ReadInput("Enter a command: ", forceLowerCase: true);
@@ -186,7 +187,7 @@ namespace AccountTrackerConsoleApp
 
                 //Request user input
                 ConsoleHelper.OutputLine("Enter a date or enter r - to return to transactions list.");
-                ConsoleHelper.OutputLine("Date format example - 10/22/2018");
+                ConsoleHelper.OutputLine("Date format example - 10/22/2018", false);
 
                 //Confirm input
                 command = ConsoleHelper.ReadInput("Date", true);
@@ -199,17 +200,54 @@ namespace AccountTrackerConsoleApp
             }            
         }
 
-        //TODO: Implement
+        //TODO: Add XML
         private static int? GetTransactionTypeID()
         {
-            throw new NotImplementedException();
+            string command = "get value";
+            List<int> transactionTypeIds = new List<int>();
+
+            while (true)
+            {
+                switch (command)
+                {
+                    case CommandReturn:
+                        return null;
+                    case "get value":
+                        ConsoleHelper.ListTransactionTypes(transactionTypeIds);
+                        break;
+                    default:
+                        if (InputConfirmed(command, transactionTypeIds))
+                        {
+                            return transactionTypeIds[int.Parse(command) - 1];
+                        }
+                        else
+                        {
+                            ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
+                        }
+                        break;
+                }
+
+                //List the available commands.
+                ConsoleHelper.OutputBlankLine();
+                ConsoleHelper.Output("Commands: ");
+                var transactionTypeCount = ConsoleHelper.GetListCount("TransactionType");
+                string message = "";
+                if (transactionTypeCount > 0)
+                {
+                    message = $"Select 1-{transactionTypeCount} or ";
+                }
+                ConsoleHelper.Output($"{message}r - return to detailed screen");
+
+                //Get the command from the user.
+                command = ConsoleHelper.ReadInput("Enter a command: ", forceLowerCase: true);
+            }
         }
 
-        //TODO: Implement
+        //TODO: XML documentation
         private static int? GetAccountID()
         {
             string command = "get value";            
-            List<int> accountIds = null;
+            List<int> accountIds = new List<int>();
 
             while (true)
             {
@@ -236,15 +274,22 @@ namespace AccountTrackerConsoleApp
                 ConsoleHelper.OutputBlankLine();
                 ConsoleHelper.Output("Commands: ");
                 var accountCount = ConsoleHelper.GetListCount("Account");
+                string message = "";
                 if (accountCount > 0)
                 {
-                    ConsoleHelper.Output($"Select 1-{accountCount} or,");
+                    message = $"Select 1-{accountCount} or ";
                 }
-                ConsoleHelper.OutputLine("r - return to detailed screen", false);
+                ConsoleHelper.Output($"{message}r - return to detailed screen");
 
                 //Get the command from the user.
                 command = ConsoleHelper.ReadInput("Enter a command: ", forceLowerCase: true);
             }
+        }
+
+        //TODO: Implement
+        private static decimal GetAmount()
+        {
+            throw new NotImplementedException();
         }
 
         //TODO: Implement
@@ -265,11 +310,7 @@ namespace AccountTrackerConsoleApp
             throw new NotImplementedException();
         }
 
-        //TODO: Implement
-        private static decimal GetAmount()
-        {
-            throw new NotImplementedException();
-        }
+
 
 
         public static bool AttempDisplayTransaction(List<int> transactionIds, string command)

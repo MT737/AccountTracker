@@ -111,21 +111,20 @@ namespace AccountTrackerConsoleApp.Helpers
             }
         }
 
-        public static void ListTransactionTypes()
+        public static void ListTransactionTypes(List<int> transactionTypeIds)
         {
             ClearOutput();
-
+            OutputLine("TRANSACTION TYPE:");
             using (var context = GetContext())
             {
                 var transactionTypesRepository = new TransactionTypeRepository(context);
                 var transactionTypes = transactionTypesRepository.GetList();
                 if (transactionTypes.Count > 0)
                 {
-                    var transactionTypeCount = 0;
                     foreach (var transactionType in transactionTypes)
                     {
-                        transactionTypeCount++;
-                        Console.WriteLine($"{transactionTypeCount} {transactionType.Name}");
+                        transactionTypeIds.Add(transactionType.TransactionTypeID);                        
+                        Console.WriteLine($"{transactionTypes.IndexOf(transactionType) + 1}) {transactionType.Name}");
                     }
                 }
             }
