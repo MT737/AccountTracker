@@ -16,7 +16,16 @@ namespace AccountTrackerLibrary.Data
         //TODO Implement TransType Get
         public override TransactionType Get(int id, bool includeRelatedEntities = true)
         {
-            throw new NotImplementedException();
+            var transactionType = Context.TransactionTypes.AsQueryable();
+
+            if (includeRelatedEntities)
+            {
+                throw new NotImplementedException(); 
+            }
+
+            return transactionType
+                .Where(tt => tt.TransactionTypeID == id)
+                .SingleOrDefault();
         }
 
         public override IList<TransactionType> GetList()

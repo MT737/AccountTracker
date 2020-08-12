@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AccountTrackerLibrary;
 using AccountTrackerLibrary.Data;
 using AccountTrackerLibrary.Models;
 
@@ -18,6 +19,7 @@ namespace AccountTrackerConsoleApp.Helpers
             return context;               
         }
 
+        //TODO: XML
         public static void ListTransactions(List<int> transactionIds)
         {
             ClearOutput();
@@ -45,7 +47,7 @@ namespace AccountTrackerConsoleApp.Helpers
             }
         }
 
-        public static void GetDetailTransaction(int transactionId)
+        public static void ListTransactionDetails(int transactionId)
         {
             ClearOutput();
             OutputLine("DETAILED TRANSACTION INFORMATION");
@@ -66,9 +68,73 @@ namespace AccountTrackerConsoleApp.Helpers
             }
         }
 
+        public static void ListTransactionDetails(Transaction transaction)
+        {
+            ClearOutput();
+            OutputLine("DETAILED TRANSACTION INFORMATION");
+            
+            using (var context = GetContext())
+            {
+                OutputLine($"Transaction number:\t\t{transaction.TransactionID}");
+                OutputLine($"Transaction Date:\t\t{transaction.TransactionDate}", outputBlankLineBeforMessage: false);
+                OutputLine($"Ammount:\t\t\t{transaction.Amount}", outputBlankLineBeforMessage: false);
+                OutputLine($"Description:\t\t\t{transaction.Description}", outputBlankLineBeforMessage: false);
+
+                var transactionTypeRepository = new TransactionTypeRepository(context);                
+                OutputLine($"Transaction Type:\t\t{transactionTypeRepository.Get(transaction.TransactionTypeID, false).Name}", outputBlankLineBeforMessage: false);
+
+                var accountRepository = new AccountRepository(context);
+                OutputLine($"Account:\t\t\t{accountRepository.Get(transaction.AccountID, false).Name}", outputBlankLineBeforMessage: false);
+
+                var categoryRepository = new CategoryRepository(context);
+                OutputLine($"Category:\t\t\t{categoryRepository.Get(transaction.CategoryID, false).Name}", outputBlankLineBeforMessage: false);
+
+                var vendorRepository = new VendorRepository(context);
+                OutputLine($"Vendor:\t\t\t\t{vendorRepository.Get(transaction.VendorID, false).Name}", outputBlankLineBeforMessage: false);
+            }
+        }
+
+        public static Transaction GetTransaction(int transactionId)
+        {
+            using (var context = GetContext())
+            {
+                var transactionRepository = new TransactionRepository(context);
+                return transactionRepository.Get(transactionId, includeRelatedEntities: false); 
+            }
+        }
+
+        public static void AddTransaction(Transaction transaction)
+        {
+            using (Context context = GetContext())
+            {
+                var transactionRepository = new TransactionRepository(context);
+                transactionRepository.Add(transaction);
+            }
+        }
+
+        public static void DeleteTransaction(int transactionId)
+        {
+            using (Context context = GetContext())
+            {
+                var transactionRepository = new TransactionRepository(context);
+                transactionRepository.Delete(transactionId);
+            }
+        }
+
+        public static void EditTransaction(Transaction transaction)
+        {
+            using (Context context = GetContext())
+            {
+                var transactionRepository = new TransactionRepository(context);
+                transactionRepository.Update(transaction);
+            }
+        }
+
         public static void ListAccounts(List<int> accountIds)
         {
             ClearOutput();
+            accountIds.Clear();         //Clearing the list to account for instances in which the list has to be recalled due to a bad user input.
+
             OutputLine("ACCOUNTS:");
 
             using (var context = GetContext())
@@ -90,9 +156,10 @@ namespace AccountTrackerConsoleApp.Helpers
             }
         }
 
-        public static void ListCategories()
+        public static void ListCategories(List<int> categoryIds)
         {
             ClearOutput();
+            categoryIds.Clear();         //Clearing the list to account for instances in which the list has to be recalled due to a bad user input.
             OutputLine("CATEGORIES:");
 
             using (var context = GetContext())
@@ -100,12 +167,11 @@ namespace AccountTrackerConsoleApp.Helpers
                 var categoryRepository = new CategoryRepository(context);
                 var categories = categoryRepository.GetList();
                 if (categories.Count > 0)
-                {
-                    var categoryCount = 0;
+                {                    
                     foreach (var category in categories)
                     {
-                        categoryCount++;
-                        Console.WriteLine($"{categoryCount}) {category.Name}");
+                        categoryIds.Add(category.CategoryID);
+                        Console.WriteLine($"{categories.IndexOf(category) + 1}) {category.Name}");
                     }
                 } 
             }
@@ -114,6 +180,7 @@ namespace AccountTrackerConsoleApp.Helpers
         public static void ListTransactionTypes(List<int> transactionTypeIds)
         {
             ClearOutput();
+            transactionTypeIds.Clear();         //Clearing the list to account for instances in which the list has to be recalled due to a bad user input.
             OutputLine("TRANSACTION TYPE:");
             using (var context = GetContext())
             {
@@ -130,9 +197,10 @@ namespace AccountTrackerConsoleApp.Helpers
             }
         }
 
-        public static void ListVendors()
+        public static void ListVendors(List<int> vendorIds)
         {
             ClearOutput();
+            vendorIds.Clear();         //Clearing the list to account for instances in which the list has to be recalled due to a bad user input.
             OutputLine("VENDORS:");
 
             using (var context = GetContext())
@@ -141,16 +209,14 @@ namespace AccountTrackerConsoleApp.Helpers
                 var vendors = vendorRepository.GetList();
                 if (vendors.Count > 0)
                 {
-                    var vendorCount = 0;
                     foreach (var vendor in vendors)
                     {
-                        vendorCount++;
-                        Console.WriteLine($"{vendorCount}) {vendor.Name}");
+                        vendorIds.Add(vendor.VendorID);
+                        Console.WriteLine($"{vendors.IndexOf(vendor) + 1}) {vendor.Name}");
                     }
                 }
             }
         }
-
 
         public static void OutputBlankLine()
         {
@@ -184,8 +250,6 @@ namespace AccountTrackerConsoleApp.Helpers
             return forceLowerCase ? input.ToLower() : input;
         }
 
-
-        //TODO: XML
         public static int? GetListCount(string listName)
         {
             using (var context = GetContext())

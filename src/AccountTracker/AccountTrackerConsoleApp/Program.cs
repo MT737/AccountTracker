@@ -8,22 +8,30 @@ using System.Threading.Tasks;
 using AccountTrackerConsoleApp.Helpers;
 using AccountTrackerLibrary;
 using AccountTrackerLibrary.Data;
+using AccountTrackerLibrary.Models;
 
 namespace AccountTrackerConsoleApp
 {
     class Program
     {
         //Various commands that can be performed.        
-        const string CommandListTransactions = "t";
-        const string CommandListAccounts = "u";
-        const string CommandListCategories = "c";
-        const string CommandListVendors = "v";
-        const string CommandMainScreen = "m";
         const string CommandAdd = "a";
         const string CommandEdit = "e";
         const string CommandDelete = "d";
         const string CommandQuit = "q";
         const string CommandReturn = "r";
+        const string CommandYes = "y";
+        const string CommandB = "b";
+        const string CommandC = "c";
+        const string CommandG = "g";
+        const string CommandM = "m";
+        const string CommandS = "s";
+        const string CommandT = "t";
+        const string CommandU = "u";
+        const string CommandV = "v";
+        const string CommandW = "w";
+        const string CommandX = "x";
+        const string CommandZ = "z";
 
         static void Main(string[] args)
         {         
@@ -34,23 +42,23 @@ namespace AccountTrackerConsoleApp
             {
                 switch (command)
                 {
-                    case CommandListTransactions:
+                    case CommandT:
                         ViewTransactions();
-                        command = CommandMainScreen;
+                        command = CommandM;
                         continue;
-                    case CommandListAccounts:
+                    case CommandU:
                         //ConsoleHelper.ListAccounts();
                         break;
-                    case CommandListCategories:
+                    case CommandC:
                         //ConsoleHelper.ListCategories();
                         break;
-                    case CommandListVendors:
+                    case CommandV:
                         //ConsoleHelper.ListVendors();
                         break;
                     case "welcome":
                         //ConsoleHelper.Output("Welcome to the AccountTracker console app.");
                         break;
-                    case CommandMainScreen:
+                    case CommandM:
                         //ConsoleHelper.ClearOutput();
                         break;
                     default: 
@@ -69,24 +77,24 @@ namespace AccountTrackerConsoleApp
 
         public static void ViewTransactions()
         {
-            string command = CommandListTransactions;
+            string command = CommandT;
             var transactionIds = new List<int>();
             
-            while (command != CommandMainScreen)
+            while (command != CommandM)
             {
                 switch (command)
                 {
-                    case CommandListTransactions:
+                    case CommandT:
                         ConsoleHelper.ListTransactions(transactionIds);
                         break;
                     case CommandAdd:
                         AddTransaction();
-                        command = CommandListTransactions;
+                        command = CommandT;
                         continue;
                     default:
                         if (AttempDisplayTransaction(transactionIds, command))
                         {
-                            command = CommandListTransactions;
+                            command = CommandT;
                             continue;
                         }
                         else
@@ -114,7 +122,6 @@ namespace AccountTrackerConsoleApp
 
         public static void AddTransaction()
         {
-            //pull inputs from user
             var transaction = new Transaction();
             var haltProcess = false;
             int? inputId;
@@ -130,7 +137,7 @@ namespace AccountTrackerConsoleApp
                 }
                 transaction.TransactionDate = transDate.Value;
 
-                //Get TransactionType ID by listing type options for the user
+                //TransactionType
                 inputId = GetTransactionTypeID();
                 if (inputId == null)
                 {
@@ -139,7 +146,7 @@ namespace AccountTrackerConsoleApp
                 }
                 transaction.TransactionTypeID = inputId.Value;
 
-                //Get Account by listing type options for the user
+                //Account
                 inputId = GetAccountID();
                 if (inputId == null)
                 {
@@ -148,17 +155,39 @@ namespace AccountTrackerConsoleApp
                 }                
                 transaction.AccountID = inputId.Value;
 
-                //Get amount (ensure the value is currency)
-                transaction.Amount = GetAmount();
+                //Amount
+                decimal? inputAmount = GetAmount();
+                if (inputAmount == null)
+                {
+                    haltProcess = true;
+                    continue;
+                }
+                transaction.Amount = inputAmount.Value;
 
-                //Get Category by listing type options for the user
-                transaction.CategoryID = GetCategoryID();
+                //Category
+                inputId = GetCategoryID();
+                if (inputId == null)
+                {
+                    haltProcess = true;
+                    continue;
+                }
+                transaction.CategoryID = inputId.Value;
 
-                //Get Vendor by listing type options for the user
-                transaction.VendorID = GetVendorID();
+                //Vendor
+                inputId = GetVendorID();
+                if(inputId == null)
+                {
+                    haltProcess = true;
+                    continue;
+                }                
+                transaction.VendorID = inputId.Value;
 
-                //Get description (ensure the text is within bounds) Test EF's sql injection protection by trying to use drop table
-                transaction.Description = GetDescription(); 
+                //Description
+                transaction.Description = GetDescription();
+
+                //Add Transaction
+                ConsoleHelper.AddTransaction(transaction);
+                haltProcess = true;
             }
         }
 
@@ -181,6 +210,7 @@ namespace AccountTrackerConsoleApp
                         ConsoleHelper.Output("DATE");
                         break;
                     default:
+                        ConsoleHelper.ClearOutput();
                         ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
                         break;
                 }
@@ -221,7 +251,8 @@ namespace AccountTrackerConsoleApp
                             return transactionTypeIds[int.Parse(command) - 1];
                         }
                         else
-                        {
+                        {                      
+                            ConsoleHelper.ListTransactionTypes(transactionTypeIds);
                             ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
                         }
                         break;
@@ -265,6 +296,7 @@ namespace AccountTrackerConsoleApp
                         }
                         else
                         {
+                            ConsoleHelper.ListAccounts(accountIds);
                             ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
                         }
                         break;
@@ -286,33 +318,143 @@ namespace AccountTrackerConsoleApp
             }
         }
 
-        //TODO: Implement
-        private static decimal GetAmount()
+        //TODO: XML Documenation
+        private static decimal? GetAmount()
         {
-            throw new NotImplementedException();
+            string command = "get value";
+
+            while (true)
+            {
+                switch (command)
+                {
+                    case CommandReturn:
+                        return null;
+                    case "get value":
+                        ConsoleHelper.ClearOutput();
+                        break;
+                    default:
+                        if (InputConfirmed(command))
+                        {
+                            return decimal.Parse(command);
+                        }
+                        else
+                        {
+                            ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
+                        }
+                        break;
+                }
+
+                //List the available commands.
+                ConsoleHelper.OutputBlankLine();
+                ConsoleHelper.Output("AMOUNT:");
+                ConsoleHelper.Output("Commands: ");
+                string message = "Enter a transaction amount or ";
+                ConsoleHelper.Output($"{message}r - return to detailed screen");
+
+                //Get the command from the user.
+                command = ConsoleHelper.ReadInput("Command: ", forceLowerCase: true);
+            }
         }
 
-        //TODO: Implement
+        //TODO: XML Documentation
+        private static int? GetCategoryID()
+        {
+            string command = "get value";
+            List<int> categoryIds = new List<int>();
+
+            while (true)
+            {
+                switch (command)
+                {
+                    case CommandReturn:
+                        return null;
+                    case "get value":
+                        ConsoleHelper.ListCategories(categoryIds);
+                        break;
+                    default:
+                        if (InputConfirmed(command, categoryIds))
+                        {
+                            return categoryIds[int.Parse(command) - 1];
+                        }
+                        else
+                        {
+                            ConsoleHelper.ListCategories(categoryIds);
+                            ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
+                        }
+                        break;
+                }
+
+                //List the available commands.
+                ConsoleHelper.OutputBlankLine();
+                ConsoleHelper.Output("Commands: ");
+                var categoryCount = ConsoleHelper.GetListCount("Category");
+                string message = "";
+                if (categoryCount > 0)
+                {
+                    message = $"Select 1-{categoryCount} or ";
+                }
+                ConsoleHelper.Output($"{message}r - return to detailed screen");
+
+                //Get the command from the user.
+                command = ConsoleHelper.ReadInput("Enter a command: ", forceLowerCase: true);
+            }
+        }
+
+        //TODO: XML Documentation
+        private static int? GetVendorID()
+        {
+            string command = "get value";
+            List<int> vendorIds = new List<int>();
+
+            while (true)
+            {
+                switch (command)
+                {
+                    case CommandReturn:
+                        return null;
+                    case "get value":
+                        ConsoleHelper.ListVendors(vendorIds);
+                        break;
+                    default:
+                        if (InputConfirmed(command, vendorIds))
+                        {
+                            return vendorIds[int.Parse(command) - 1];
+                        }
+                        else
+                        {
+                            ConsoleHelper.ListCategories(vendorIds);
+                            ConsoleHelper.OutputLine("Sorry, that input was not valid. Try again.");
+                        }
+                        break;
+                }
+
+                //List the available commands.
+                ConsoleHelper.OutputBlankLine();
+                ConsoleHelper.Output("Commands: ");
+                var categoryCount = ConsoleHelper.GetListCount("Vendor");
+                string message = "";
+                if (categoryCount > 0)
+                {
+                    message = $"Select 1-{categoryCount} or ";
+                }
+                ConsoleHelper.Output($"{message}r - return to detailed screen");
+
+                //Get the command from the user.
+                command = ConsoleHelper.ReadInput("Enter a command: ", forceLowerCase: true);
+            }
+        }
+
+        //TODO: XML Documentation
         private static string GetDescription()
         {
-            throw new NotImplementedException();
+            ConsoleHelper.ClearOutput();
+            ConsoleHelper.Output("Enter a description (this can be left blank).");
+            
+            //Get the command from the user.
+            return ConsoleHelper.ReadInput("Description: ", forceLowerCase: false);            
         }
 
-        //TODO: Implement
-        private static int GetVendorID()
-        {
-            throw new NotImplementedException();
-        }
-
-        //TODO: Implement
-        private static int GetCategoryID()
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-
+        //TODO: XML Documentation
         public static bool AttempDisplayTransaction(List<int> transactionIds, string command)
         {
             bool successful = false;
@@ -342,22 +484,23 @@ namespace AccountTrackerConsoleApp
             return successful;
         }
 
+        //TODO: Complete Implementation
         public static void DisplayTransaction(int transactionID)
         {
-            string command = CommandListTransactions;
+            string command = CommandT;
             while (command != CommandReturn)
             {
                 switch (command)
                 {
-                    case CommandListTransactions:
-                        ConsoleHelper.GetDetailTransaction(transactionID);
+                    case CommandT:
+                        ConsoleHelper.ListTransactionDetails(transactionID);
                         break;
                     case CommandEdit:
-                        //TODO: Edit transaction
-                        command = CommandListTransactions;
+                        EditTransaction(transactionID);
+                        command = CommandT;
                         continue;
                     case CommandDelete:
-                        //TODO: Delete transaction. Use an if statement with a boolean method to confirm deletion. When deletion complete, pass the return command. If return false, relist the transaction details.
+                        DeleteTransaction(transactionID);
                         command = CommandReturn;
                         continue;
                     default:
@@ -375,6 +518,132 @@ namespace AccountTrackerConsoleApp
             }
         }
 
+        //TODO: Implement
+        private static void EditTransaction(int transactionId)
+        {
+            string command = CommandT;
+            int? id;
+            Transaction transaction = ConsoleHelper.GetTransaction(transactionId);
+           
+            while (command != CommandReturn)
+            {
+                switch (command)
+                {
+                    case CommandT:
+                        ConsoleHelper.ListTransactionDetails(transaction);
+                        break;
+                    case CommandG:
+                        //Edit transaction date
+                        DateTime? date = GetTransactionDate();
+                        if (date != null)
+                        {
+                            transaction.TransactionDate = date.Value;
+                        }
+                        command = CommandT;
+                        continue;
+                    case CommandZ:
+                        //Edit transaction type                        
+                        id = GetTransactionTypeID();
+                        if (id !=null)
+                        {
+                            transaction.TransactionTypeID = id.Value;
+                        }
+                        command = CommandT;
+                        continue;
+                    case CommandX:
+                        //Edit account
+                        id = GetAccountID();
+                        if (id != null)
+                        {
+                            transaction.AccountID = id.Value;
+                        }
+                        command = CommandT;
+                        continue;
+                    case CommandC:
+                        //Edit category
+                        id = GetCategoryID();
+                        if (id != null)
+                        {
+                            transaction.CategoryID = id.Value;
+                        }
+                        command = CommandT;
+                        continue;
+                    case CommandB:
+                        //Edit amount
+                        decimal? amount = GetAmount();
+                        if (amount != null)
+                        {
+                            transaction.Amount = amount.Value;
+                        }
+                        command = CommandT;
+                        continue;
+                    case CommandV:
+                        //Edit vendor
+                        id = GetVendorID();
+                        if (id != null)
+                        {
+                            transaction.VendorID = id.Value;
+                        }
+                        command = CommandT;
+                        continue;
+                    case CommandW:
+                        //Edit description
+                        //TODO: current method doesn't provide an opportunity to back out. Add that!
+                        transaction.Description = GetDescription();
+                        command = CommandT;
+                        continue;
+                    case CommandS:
+                        //Save changes to the DB
+                        ConsoleHelper.EditTransaction(transaction);
+                        command = CommandReturn;
+                        continue;
+                    case CommandReturn:
+                        //Return;
+                        command = CommandReturn;
+                        continue;
+                    default:
+                        ConsoleHelper.OutputLine("Sorry, but the command was not understood.");
+                        break;
+                }
+
+                //List available commands
+                ConsoleHelper.OutputBlankLine();
+                ConsoleHelper.Output("Commands: ");
+                ConsoleHelper.OutputLine("d - edit date, z - edit transaction type, x - edit account, c - edit category, b - edit amount, v - edit vendor, w - edit description, s - save changes, r - cancel", false);
+
+                //Get command from user.
+                command = ConsoleHelper.ReadInput("Enter a command to edit an entry, save changes, or cancel: ", true);
+            }
+        }
+
+        //TODO: XML Documentation
+        private static void DeleteTransaction(int transactionId)
+        {
+            string command = "Confirm";
+            while (command != CommandReturn)
+            {
+                switch (command)
+                {
+                    case "Confirm":
+                        break;
+                    case CommandYes:
+                        ConsoleHelper.DeleteTransaction(transactionId);
+                        ConsoleHelper.OutputLine("Transaction deleted. Press any button to continue.", true);
+                        Console.ReadLine();
+                        command = CommandReturn;
+                        continue;
+                    default:            //if response is anything but 'y'.
+                        command = CommandReturn;
+                        continue;
+                }
+
+                //Get user confirmation.
+                ConsoleHelper.OutputLine("Are you sure you want to delete this transaction? This action cannot be undone.", true);
+                command = ConsoleHelper.ReadInput("Press 'y' to confirm or any other key to cancel.", true);
+            }
+        }
+
+        //TODO: XML Documentation
         public static bool InputConfirmed(string command, List<int> ids)
         {
             var successful = false;
@@ -397,6 +666,27 @@ namespace AccountTrackerConsoleApp
             {
                 ConsoleHelper.OutputLine("Error! Id list is null. Close program and troubleshoot.", true);
                 Environment.Exit(0); //Not a true 0 code for environment exit, but a message has been provided and the console app is not for production release.
+            }
+
+            return successful;
+        }
+
+        //TODO: XML Documentation
+        public static bool InputConfirmed(string input)
+        {
+            bool successful = false;
+
+            //Check if the input is not null.
+            if (input != null)
+            {
+                //Attempt to parse input as decimal
+                decimal.TryParse(input, out decimal value);
+
+                //Ensure the value parsed and is positive.
+                if (value > 0)
+                {
+                    successful = true;
+                }
             }
 
             return successful;

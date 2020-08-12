@@ -16,7 +16,16 @@ namespace AccountTrackerLibrary.Data
         //TODO Implement Account Get
         public override Account Get(int id, bool includeRelatedEntities = true)
         {
-            throw new NotImplementedException();
+            var account = Context.Accounts.AsQueryable();
+
+            if (includeRelatedEntities)
+            {
+                throw new NotImplementedException();
+            }
+
+            return account
+                .Where(a => a.AccountID == id)
+                .SingleOrDefault();
         }
 
         //TODO Implement Account GetList

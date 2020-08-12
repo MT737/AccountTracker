@@ -16,7 +16,16 @@ namespace AccountTrackerLibrary.Data
         //TODO Implement Category Get
         public override Category Get(int id, bool includeRelatedEntities = true)
         {
-            throw new NotImplementedException();
+            var category = Context.Categories.AsQueryable();
+
+            if (includeRelatedEntities)
+            {
+                throw new NotImplementedException(); 
+            }
+
+            return category
+                .Where(c => c.CategoryID == id)
+                .SingleOrDefault();
         }
 
         //TODO Implement Category Get list

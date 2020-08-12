@@ -17,7 +17,16 @@ namespace AccountTrackerLibrary.Data
         //TODO Implement Vendor get
         public override Vendor Get(int id, bool includeRelatedEntities = true)
         {
-            throw new NotImplementedException();
+            var vendor = Context.Vendors.AsQueryable();
+
+            if (includeRelatedEntities)
+            {
+                throw new NotImplementedException(); 
+            }
+
+            return vendor
+                .Where(v => v.VendorID == id)
+                .SingleOrDefault();
         }
 
         //TODO Implement Vendor list
