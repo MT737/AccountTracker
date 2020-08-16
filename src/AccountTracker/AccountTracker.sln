@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountTrackerLibrary", "AccountTrackerLibrary\AccountTrackerLibrary.csproj", "{6C32779B-6314-4B04-96B3-DFB20A3B121E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountTrackerWebApp", "AccountTrackerWebApp\AccountTrackerWebApp.csproj", "{1B44CFE3-3A0F-4C54-9822-9D91C7FF7225}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C32779B-6314-4B04-96B3-DFB20A3B121E} = {6C32779B-6314-4B04-96B3-DFB20A3B121E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

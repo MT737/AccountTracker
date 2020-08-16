@@ -6,13 +6,11 @@ using System.Web.Mvc;
 
 namespace AccountTrackerWebApp.Controllers
 {
-    public class HomeController : Controller
-    {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+    /// <summary>
+    /// Controller for the "About" and "Contact" sections of the website.
+    /// </summary>
+    public class GeneralController : Controller
+    {        
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
