@@ -72,6 +72,8 @@ namespace AccountTrackerLibrary.Data
             transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 2, AccountID = 2, CategoryID = 3, VendorID = 9 , Description = "Gas on Amazon card"});
             transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 1, AccountID = 2, CategoryID = 11, VendorID = 10, Description = "Paying off Amazon with BofA"});
             transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 2, AccountID = 1, CategoryID = 11, VendorID = 10, Description = "Paying off Amazon with BofA"});
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 2, AccountID = 3, CategoryID = 10, VendorID = 10, Description = "Initial Account Balance" });
+            transactions.Add(new Transaction() { TransactionDate = DateTime.Today, Amount = 35.00M, TransactionTypeID = 2, AccountID = 4, CategoryID = 10, VendorID = 10, Description = "Initial Account Balance" });
             context.Transactions.AddRange(transactions);
 
             base.Seed(context);

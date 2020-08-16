@@ -1,6 +1,7 @@
 ﻿using AccountTrackerLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,34 @@ namespace AccountTrackerLibrary.Data
         public override int GetCount()
         {
             return Context.Accounts.Count();
+        }
+
+        //TODO: Get balance
+        public decimal GetBalance(int accountId, bool isAsset)
+        {
+            //TODO: I really want to simplify this to a single query (there's already enough communications with the DB happening as is).
+            decimal balance;
+
+           var paymentTo = Context.Transactions
+                .Include(tt => tt.TransactionType)
+                .Where(t => t.AccountID == accountId && t.TransactionType.Name == "Payment To")
+                .ToList().Sum(t => t.Amount);
+
+            var paymentFrom = Context.Transactions
+                .Include(tt => tt.TransactionType)
+                .Where(t => t.AccountID == accountId && t.TransactionType.Name == "Payment From")                
+                .ToList().Sum(t => t.Amount);
+
+            //Asset balance = payments to less payments from.
+            if (isAsset)
+            {
+                return balance = paymentTo - paymentFrom;
+            }
+            //Liability balance = payments from - payments to.
+            else
+            {
+                return paymentFrom - paymentTo;
+            }
         }
     }
 }
