@@ -20,37 +20,24 @@ namespace AccountTrackerWebApp.ViewModels
         public IList<CategorySpending> ByCategorySpending { get; set; }
         public IList<VendorSpending> ByVendorSpending { get; set; }
 
-        //TODO: Review options for improving this. It feels wasteful/redundant to remake these classes just to add a field.
         //BalanceByAccount class. Leaving it as a member of the DashboardViewModel for now as it's only needed for the dashboard.
         public class AccountWithBalance
         {
-            //TODO: Remove commented out properties if they are not going to be used. 
-            //public int AccountId { get; set; }
             public string Name { get; set; }
-            //public bool IsAsset { get; set; }
-            // public bool IsActive { get; set; }
             public decimal Balance { get; set; }        
         }
 
         //CategorySpending class. Leaving it as a member of the DashboardViewModel for now as it's only needed for the dashboard.
         public class CategorySpending
         {
-            //TODO: Remove commented out properties if they are not going to be used.
-            //public int CategoryId { get; set; }
             public string Name { get; set; }
-            //public bool IsDisplayed { get; set; }
-            //public bool IsDefault { get; set; }
             public decimal Amount { get; set; }
         }
 
         //VendorSpending class. Leaving it as a member of the DashboardViewModel for now as it's only needed for the dashboard.
         public class VendorSpending
         {
-            //TODO: Remove commented out properties if they are not going to be used.
-            //public int VendorId { get; set; }
             public string Name { get; set; }
-            //public bool IsDefault { get; set; }
-            //public bool IsDisplayed { get; set; }
             public decimal Amount { get; set; }
         }
     }

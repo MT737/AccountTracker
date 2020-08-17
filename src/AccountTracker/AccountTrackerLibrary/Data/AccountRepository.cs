@@ -14,8 +14,13 @@ namespace AccountTrackerLibrary.Data
         {
         }
 
-        //TODO Implement Account Get
-        public override Account Get(int id, bool includeRelatedEntities = true)
+        /// <summary>
+        /// Retrieves a record of a single account. 
+        /// </summary>
+        /// <param name="id">Int: the AccountID of the account to be retrieved.</param>
+        /// <param name="includeRelatedEntities">Bool: determination to pull associated entities. Not currently relevant to Accounts and defaults to false.</param>
+        /// <returns></returns>
+        public override Account Get(int id, bool includeRelatedEntities = false)
         {
             var account = Context.Accounts.AsQueryable();
 
@@ -29,7 +34,10 @@ namespace AccountTrackerLibrary.Data
                 .SingleOrDefault();
         }
 
-        //TODO Implement Account GetList
+        /// <summary>
+        /// Retrieves a list of accounts that exist in the database.
+        /// </summary>
+        /// <returns>Returns and IList of Account entities.</returns>
         public override IList<Account> GetList()
         {
             return Context.Accounts
@@ -37,12 +45,21 @@ namespace AccountTrackerLibrary.Data
                 .ToList();
         }
 
+        /// <summary>
+        /// Gets a count of accounts in the database.
+        /// </summary>
+        /// <returns>Returns an integer representing the count of accounts in the database.</returns>
         public override int GetCount()
         {
             return Context.Accounts.Count();
         }
 
-        //TODO: Get balance
+        /// <summary>
+        /// Calculates an account balance based on transactions in the database.
+        /// </summary>
+        /// <param name="accountId">Int: AccountID of the account balance to be calculated.</param>
+        /// <param name="isAsset">Bool: IsAsset classification of the account balance to be calculated.</param>
+        /// <returns></returns>
         public decimal GetBalance(int accountId, bool isAsset)
         {
             //TODO: I really want to simplify this to a single query (there's already enough communications with the DB happening as is).
@@ -58,7 +75,7 @@ namespace AccountTrackerLibrary.Data
                 .Where(t => t.AccountID == accountId && t.TransactionType.Name == "Payment From")                
                 .ToList().Sum(t => t.Amount);
 
-            //Asset balance = payments to less payments from.
+            ////Asset balance = payments to less payments from.
             if (isAsset)
             {
                 return balance = paymentTo - paymentFrom;

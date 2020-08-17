@@ -23,7 +23,8 @@ namespace AccountTrackerWebApp.Controllers
         private AccountRepository _accountRepository = null;
         private CategoryRepository _categoryRepository = null;
         private VendorRepository _vendorRepository = null;
- 
+        
+        //Base constructor
         public DashboardController()
         {
             _transactionRepository = new TransactionRepository(Context);
@@ -31,7 +32,6 @@ namespace AccountTrackerWebApp.Controllers
             _categoryRepository = new CategoryRepository(Context);
             _vendorRepository = new VendorRepository(Context);
         }
-
 
         public ActionResult Index()
         {
@@ -107,8 +107,5 @@ namespace AccountTrackerWebApp.Controllers
 
             return transactions;
         }
-
-
-        
     }
 }
