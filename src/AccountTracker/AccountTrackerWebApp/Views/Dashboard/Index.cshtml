@@ -11,54 +11,128 @@
 </div>
 
 <div class="row">
-    <div class="col-md-8">
-        <h3>Transactions</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Account</th>
-                    <th>Category</th>
-                    <th>Vendor</th>
-                    <th>Ammount</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var transaction in Model.Transactions)
-                {
-                <tr>
-                    <td>@transaction.TransactionDate.Date.ToString("MM/dd/yyy")</td>
-                    <td>@transaction.TransactionType.Name</td>
-                    <td>@transaction.Account.Name</td>
-                    <td>@transaction.Category.Name</td>
-                    <td>@transaction.Vendor.Name</td>
-                    <td style="text-align: right">$@transaction.Amount.ToString("#.00")</td>
-                    <td>@transaction.Description</td>
-                </tr>
-                }
-            </tbody>
-        </table>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>Transactions</h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Account</th>
+                            <th>Category</th>
+                            <th>Vendor</th>
+                            <th>Ammount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model.Transactions)
+                        {
+                            <tr>
+                                <td>@transaction.TransactionDate.Date.ToString("MM/dd/yyy")</td>
+                                <td>@transaction.TransactionType.Name</td>
+                                <td>@transaction.Account.Name</td>
+                                <td>@transaction.Category.Name</td>
+                                <td>@transaction.Vendor.Name</td>
+                                <td style="text-align: right">$@transaction.Amount.ToString("#.00")</td>
+                                <td>@transaction.Description</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>Accounts</h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var account in Model.AccountsWithBalances)
+                        {
+                            <tr>
+                                <td>@account.Name</td>
+                                <td style="text-align: right">$@account.Balance.ToString("#.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <div class="col-md-4">
-        <h3>Accounts</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Account</th>
-                    <th>Balance</th>                    
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var account in Model.AccountsWithBalances)
-                {
-                <tr>
-                    <td>@account.Name</td>
-                    <td style="text-align: right">$@account.Balance.ToString("#.00")</td>
-                </tr>
-                }
-            </tbody>
-        </table>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>Spending by Category</h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Spending</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model.ByCategorySpending)
+                        {
+                            <tr>
+                                <td>@category.Name</td>
+                                <td style="text-align: right">$@category.Amount.ToString("#.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>Spending by Vendor</h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Vendor</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var vendor in Model.ByVendorSpending)
+                        {
+                            <tr>
+                                <td>@vendor.Name</td>
+                                <td style="text-align: right">$@vendor.Amount.ToString("#.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

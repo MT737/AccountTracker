@@ -41,5 +41,12 @@ namespace AccountTrackerLibrary.Data
         {
             return Context.Vendors.Count();
         }
+
+        public decimal GetAmount(int vendorID)
+        {
+            return Context.Transactions
+                .Where(t => t.VendorID == vendorID)
+                .ToList().Sum(t => t.Amount);
+        }
     }
 }

@@ -20,31 +20,31 @@ namespace AccountTrackerLibrary.Data
 
             //Filling in default categories.
             IList<Category> categories = new List<Category>();
-            categories.Add(new Category() { Name = "Shopping", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Eating out", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Gas", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Groceries/Sundries", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Entertainment", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Returns/Deposits", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "ATM Withdrawal", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Other", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "New Account", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Account Correction", IsActive = true, IsDefault = true });
-            categories.Add(new Category() { Name = "Account Transfer", IsActive = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Shopping", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Eating out", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Gas", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Groceries/Sundries", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Entertainment", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Returns/Deposits", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "ATM Withdrawal", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "Other", IsDisplayed = true, IsDefault = true });
+            categories.Add(new Category() { Name = "New Account", IsDisplayed = false, IsDefault = true });
+            categories.Add(new Category() { Name = "Account Correction", IsDisplayed = false, IsDefault = true });
+            categories.Add(new Category() { Name = "Account Transfer", IsDisplayed = false, IsDefault = true });
             context.Categories.AddRange(categories);
 
             //Filling default vendors
             IList<Vendor> vendors = new List<Vendor>();
-            vendors.Add(new Vendor() { Name = "Lowe's", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "Food Lion", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "Marshalls", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "Harris Teeter", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "Amazon", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "Duke Power", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "IMPLAN", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "Armstrong Transportation", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "ABC", IsDefault = true });
-            vendors.Add(new Vendor() { Name = "N/A", IsDefault = true });
+            vendors.Add(new Vendor() { Name = "Lowe's", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "Food Lion", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "Marshalls", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "Harris Teeter", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "Amazon", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "Duke Power", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "IMPLAN", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "Armstrong Transportation", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "ABC", IsDefault = true, IsDisplayed = true });
+            vendors.Add(new Vendor() { Name = "N/A", IsDefault = true, IsDisplayed = false });
             context.Vendors.AddRange(vendors);
 
             //Filling default TransTypes

@@ -19,7 +19,7 @@ namespace AccountTrackerLibrary.Models
         public bool IsDefault { get; set; }
 
         [Required]
-        public bool IsActive { get; set; }
+        public bool IsDisplayed { get; set; }
 
 
         //Navigation Property

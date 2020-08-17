@@ -40,5 +40,12 @@ namespace AccountTrackerLibrary.Data
         {
             return Context.Categories.Count();
         }
+
+        public decimal GetCategorySpending(int categoryID)
+        {
+            return Context.Transactions
+                .Where(t => t.CategoryID == categoryID)
+                .ToList().Sum(t => t.Amount);
+        }
     }
 }

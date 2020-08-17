@@ -3,6 +3,7 @@ using AccountTrackerLibrary.Data;
 using AccountTrackerWebApp.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations.Infrastructure;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,51 +21,94 @@ namespace AccountTrackerWebApp.Controllers
         //Private field
         private TransactionRepository _transactionRepository = null;
         private AccountRepository _accountRepository = null;
-
+        private CategoryRepository _categoryRepository = null;
+        private VendorRepository _vendorRepository = null;
+ 
         public DashboardController()
         {
             _transactionRepository = new TransactionRepository(Context);
             _accountRepository = new AccountRepository(Context);
+            _categoryRepository = new CategoryRepository(Context);
+            _vendorRepository = new VendorRepository(Context);
         }
 
 
         public ActionResult Index()
-        {   
+        {
             //Instantiate dashboardviewmodel
             var dashboardItems = new DashboardViewModel();
 
-            //TODO: Create methods within this controller to handle process of filling each of the view model's properties.
+            //Complete dashboardviewmodel's properties
+            dashboardItems.Transactions = GetTransactionsWithDetails();            
+            dashboardItems.AccountsWithBalances = GetAccountWithBalances();
+            dashboardItems.ByCategorySpending = GetCategorySpending();
+            dashboardItems.ByVendorSpending = GetVendorSpending();
+            return View(dashboardItems);
+        }
 
-            //Instantiate ILists for each of the viewmodel's properties.
-            IList<Transaction> transactions = new List<Transaction>();
+        private IList<VendorSpending> GetVendorSpending()
+        {
+            IList<VendorSpending> vendorSpending = new List<VendorSpending>();
+            foreach (var vendor in _vendorRepository.GetList())
+            {
+                if (vendor.IsDisplayed)
+                {
+                    VendorSpending vendorSpendingHolder = new VendorSpending();
+                    vendorSpendingHolder.Name = vendor.Name;
+                    vendorSpendingHolder.Amount = _vendorRepository.GetAmount(vendor.VendorID);
+                    vendorSpending.Add(vendorSpendingHolder);
+                }
+            }
+            return vendorSpending;
+        }
+
+        private IList<CategorySpending> GetCategorySpending()
+        {
+            IList<CategorySpending> categorySpending = new List<CategorySpending>();
+            foreach (var category in _categoryRepository.GetList())
+            {
+                if (category.IsDisplayed)
+                {
+                    CategorySpending categorySpendingHolder = new CategorySpending();
+                    categorySpendingHolder.Name = category.Name;
+                    categorySpendingHolder.Amount = _categoryRepository.GetCategorySpending(category.CategoryID);
+                    categorySpending.Add(categorySpendingHolder); 
+                }
+            }
+
+            return categorySpending;
+        }
+
+        public IList<AccountWithBalance> GetAccountWithBalances()
+        {
+            //Get list of accounts
             IList<AccountWithBalance> accountsWithBalances = new List<AccountWithBalance>();
+            foreach (var account in _accountRepository.GetList())
+            {
+                //Set detailed values and get amount
+                AccountWithBalance accountWithBalanceHolder = new AccountWithBalance();
+                accountWithBalanceHolder.Name = account.Name;
+                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, account.IsAsset);
+                accountsWithBalances.Add(accountWithBalanceHolder);
+            }
 
+            return accountsWithBalances;
+        }
+
+        public IList<Transaction> GetTransactionsWithDetails()
+        {
             //Get get a list of transactions to gain access to transaction ids
+            IList<Transaction> transactions = new List<Transaction>();
             foreach (var transaction in _transactionRepository.GetList())
             {
                 //Get the detailed data for each transaction and add it to the IList of transactions
                 transactions.Add(_transactionRepository.Get(transaction.TransactionID, true));
-            }            
-            //Add IList of transactions to the associated Dashboardviewmodel property.
-            dashboardItems.Transactions = transactions;
-
-            //Get list of accounts
-            foreach (var account in _accountRepository.GetList())
-            {
-                //Set detailed values and get amount
-                var accountWithBalance = new AccountWithBalance();
-                accountWithBalance.AccountId = account.AccountID;
-                accountWithBalance.Name = account.Name;
-                accountWithBalance.IsAsset = account.IsAsset;
-                accountWithBalance.IsActive = account.IsActive;
-                accountWithBalance.Balance = _accountRepository.GetBalance(account.AccountID, account.IsAsset);
-                accountsWithBalances.Add(accountWithBalance);
             }
-            //Add IList of accounts with balances to the associated Dashboardviewmodel property.
-            dashboardItems.AccountsWithBalances = accountsWithBalances;
-            
-            
-            return View(dashboardItems);
+
+            return transactions;
         }
+
+
+        
     }
 }
