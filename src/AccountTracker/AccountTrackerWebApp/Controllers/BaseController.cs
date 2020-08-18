@@ -1,4 +1,5 @@
-﻿using AccountTrackerLibrary.Data;
+﻿using AccountTrackerLibrary;
+using AccountTrackerLibrary.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication.ExtendedProtection;
@@ -12,6 +13,7 @@ namespace AccountTrackerWebApp.Controllers
     {
         //Tracking if the dispose method has already been called.
         private bool _disposed = false;
+        private TransactionRepository _transactionRepository = null;
 
         //Property
         public Context Context { get; set; }
@@ -20,6 +22,20 @@ namespace AccountTrackerWebApp.Controllers
         public BaseController()
         {
             Context = new Context();
+            _transactionRepository = new TransactionRepository(Context);
+        }
+
+        public IList<Transaction> GetTransactionsWithDetails()
+        {
+            //Get get a list of transactions to gain access to transaction ids
+            IList<Transaction> transactions = new List<Transaction>();
+            foreach (var transaction in _transactionRepository.GetList())
+            {
+                //Get the detailed data for each transaction and add it to the IList of transactions
+                transactions.Add(_transactionRepository.Get(transaction.TransactionID, true));
+            }
+
+            return transactions;
         }
 
         //The bool parameter of this method determines if managed resources should be removed as well.

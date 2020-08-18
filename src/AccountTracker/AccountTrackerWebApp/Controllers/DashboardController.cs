@@ -8,7 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
-using static AccountTrackerWebApp.ViewModels.DashboardViewModel;
+using static AccountTrackerWebApp.ViewModels.ViewModel;
 
 namespace AccountTrackerWebApp.Controllers
 {
@@ -35,10 +35,10 @@ namespace AccountTrackerWebApp.Controllers
 
         public ActionResult Index()
         {
-            //Instantiate dashboardviewmodel
-            var dashboardItems = new DashboardViewModel();
+            //Instantiate viewmodel
+            var dashboardItems = new ViewModel();
 
-            //Complete dashboardviewmodel's properties
+            //Complete viewmodel's properties required for dashboard view
             dashboardItems.Transactions = GetTransactionsWithDetails();            
             dashboardItems.AccountsWithBalances = GetAccountWithBalances();
             dashboardItems.ByCategorySpending = GetCategorySpending();
@@ -93,19 +93,6 @@ namespace AccountTrackerWebApp.Controllers
             }
 
             return accountsWithBalances;
-        }
-
-        public IList<Transaction> GetTransactionsWithDetails()
-        {
-            //Get get a list of transactions to gain access to transaction ids
-            IList<Transaction> transactions = new List<Transaction>();
-            foreach (var transaction in _transactionRepository.GetList())
-            {
-                //Get the detailed data for each transaction and add it to the IList of transactions
-                transactions.Add(_transactionRepository.Get(transaction.TransactionID, true));
-            }
-
-            return transactions;
         }
     }
 }

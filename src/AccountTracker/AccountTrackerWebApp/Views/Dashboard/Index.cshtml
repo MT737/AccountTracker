@@ -1,4 +1,4 @@
-﻿@model AccountTrackerWebApp.ViewModels.DashboardViewModel
+﻿@model AccountTrackerWebApp.ViewModels.ViewModel
 
 @{
     ViewBag.Title = "Dashboard";
@@ -10,46 +10,6 @@
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h4>Transactions</h4>
-                </div>
-            </div>
-            <div class="panel-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Account</th>
-                            <th>Category</th>
-                            <th>Vendor</th>
-                            <th>Ammount</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var transaction in Model.Transactions)
-                        {
-                            <tr>
-                                <td>@transaction.TransactionDate.Date.ToString("MM/dd/yyy")</td>
-                                <td>@transaction.TransactionType.Name</td>
-                                <td>@transaction.Account.Name</td>
-                                <td>@transaction.Category.Name</td>
-                                <td>@transaction.Vendor.Name</td>
-                                <td style="text-align: right">$@transaction.Amount.ToString("#,##0.00")</td>
-                                <td>@transaction.Description</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="row">
     <div class="col-md-4">
         <div class="panel panel-default">
@@ -128,6 +88,46 @@
                             <tr>
                                 <td>@vendor.Name</td>
                                 <td style="text-align: right">$@vendor.Amount.ToString("#,##0.00")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>Transactions</h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Account</th>
+                            <th>Category</th>
+                            <th>Vendor</th>
+                            <th>Ammount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model.Transactions)
+                        {
+                            <tr>
+                                <td>@transaction.TransactionDate.Date.ToString("MM/dd/yyyy")</td>
+                                <td>@transaction.TransactionType.Name</td>
+                                <td>@transaction.Account.Name</td>
+                                <td>@transaction.Category.Name</td>
+                                <td>@transaction.Vendor.Name</td>
+                                <td style="text-align: right">$@transaction.Amount.ToString("#,##0.00")</td>
+                                <td>@transaction.Description</td>
                             </tr>
                         }
                     </tbody>

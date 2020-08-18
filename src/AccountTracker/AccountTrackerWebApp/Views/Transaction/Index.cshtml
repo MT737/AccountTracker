@@ -1,0 +1,42 @@
+﻿@model AccountTrackerWebApp.ViewModels.ViewModel
+
+@{
+    ViewBag.Title = "Transaction";
+}
+
+<h2>Transactions</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Account</th>
+                            <th>Category</th>
+                            <th>Vendor</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model.Transactions)
+                        {
+                            <tr>
+                                <td>@transaction.TransactionDate.ToString("MM/dd/yyyy")</td>
+                                <td>@transaction.TransactionType.Name</td>
+                                <td>@transaction.Account.Name</td>
+                                <td>@transaction.Category.Name</td>
+                                <td>@transaction.Vendor.Name</td>
+                                <td style="text-align: right">$@transaction.Amount.ToString("#,##0.00")</td>
+                                <td>@transaction.Description</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

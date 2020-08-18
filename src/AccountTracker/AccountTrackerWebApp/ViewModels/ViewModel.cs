@@ -12,7 +12,7 @@ namespace AccountTrackerWebApp.ViewModels
     /// <summary>
     /// The view model for the "Dashboard" view.
     /// </summary>
-    public class DashboardViewModel
+    public class ViewModel
     {
         //Properties
         public IList<Transaction> Transactions { get; set; }

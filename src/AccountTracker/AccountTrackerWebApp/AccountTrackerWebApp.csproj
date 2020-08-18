@@ -138,7 +138,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -174,12 +174,12 @@
     <Content Include="Views\General\About.cshtml" />
     <Content Include="Views\General\Contact.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Transaction\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Category\" />
-    <Folder Include="Views\Transaction\" />
     <Folder Include="Views\Vendor\" />
   </ItemGroup>
   <ItemGroup>
