@@ -8,25 +8,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccountTrackerLibrary
+namespace AccountTrackerLibrary.Models
 {
     public class Transaction
     {
         //Properties    
         public int TransactionID { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Date")]        
         public DateTime TransactionDate { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Transaction Type")]
         public int TransactionTypeID { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Account")]
         public int AccountID { get; set; }
 
-        [Required]
+        [Required, Display(Name = "Category")]
         public int CategoryID { get; set; }
         
+        [Required, Display(Name = "Vendor")]
         public int VendorID { get; set; }
 
         [Required]

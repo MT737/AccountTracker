@@ -48,5 +48,12 @@ namespace AccountTrackerLibrary.Data
                 .Where(t => t.VendorID == vendorID)
                 .ToList().Sum(t => t.Amount);
         }
+
+        public int GetID(string name)
+        {
+            return Context.Vendors
+                .Where(v => v.Name == name)
+                .SingleOrDefault().VendorID;
+        }
     }
 }

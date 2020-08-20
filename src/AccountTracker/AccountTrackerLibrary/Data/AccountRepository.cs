@@ -45,6 +45,13 @@ namespace AccountTrackerLibrary.Data
                 .ToList();
         }
 
+        public int GetID(string name)
+        {
+            return Context.Accounts
+                .Where(a => a.Name == name)
+                .SingleOrDefault().AccountID;
+        }
+
         /// <summary>
         /// Gets a count of accounts in the database.
         /// </summary>
@@ -85,6 +92,13 @@ namespace AccountTrackerLibrary.Data
             {
                 return paymentFrom - paymentTo;
             }
+        }
+
+        public bool NameExists(string name, int accountID)
+        {
+           return Context.Accounts
+                .Where(a => a.Name.ToLower() == name.ToLower() && a.AccountID != accountID)
+                .Any();
         }
     }
 }

@@ -4,8 +4,22 @@
     ViewBag.Title = "Transaction";
 }
 
-<h2>Transactions</h2>
+@Html.Partial("_Message")
 
+<div class="row">
+    <div class="col-md-6">
+        <h2>@ViewBag.Title</h2>
+    </div>
+    <!--TODO: Buttons are floating in a weird spot. Fix this.-->
+    <div class="col-md-6">
+        <a href="@Url.Action("Add", "Transaction")" class="btn btn-primary btn-md pull-right" >
+            <span class="glyphicon glyphicon-plus"></span>Add
+        </a>
+        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-md pull-right">
+            <span class="glyphicon glyphicon-step-backward"></span>Back
+        </a>        
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -20,23 +34,32 @@
                             <th>Vendor</th>
                             <th>Amount</th>
                             <th>Description</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var transaction in Model.Transactions)
                         {
-                            <tr>
-                                <td>@transaction.TransactionDate.ToString("MM/dd/yyyy")</td>
-                                <td>@transaction.TransactionType.Name</td>
-                                <td>@transaction.Account.Name</td>
-                                <td>@transaction.Category.Name</td>
-                                <td>@transaction.Vendor.Name</td>
-                                <td style="text-align: right">$@transaction.Amount.ToString("#,##0.00")</td>
-                                <td>@transaction.Description</td>
-                            </tr>
+                        <tr>
+                            <td>@transaction.TransactionDate.ToString("MM/dd/yyyy")</td>
+                            <td>@transaction.TransactionType.Name</td>
+                            <td>@transaction.Account.Name</td>
+                            <td>@transaction.Category.Name</td>
+                            <td>@transaction.Vendor.Name</td>
+                            <td style="text-align: right">$@transaction.Amount.ToString("#,##0.00")</td>
+                            <td>@transaction.Description</td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Transaction", new { id = transaction.TransactionID })" />
+                                <span class="glyphicon glyphicon-edit"></span>
+                                <a href="@Url.Action("Delete", "Transaction", new { id = transaction.TransactionID })" />
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+</div>

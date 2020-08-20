@@ -1,0 +1,37 @@
+﻿@model AccountTrackerWebApp.ViewModels.ViewModel
+
+@{
+    ViewBag.Title = "Add Transaction";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <!--TODO: Issue - Validation Summary is showing even when there're no issues-->
+    @Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
+
+    @Html.Partial("_TransactionForm")
+
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <div class="col-md-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<!--TODO: Confirm sqcript is required-->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+

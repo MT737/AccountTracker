@@ -39,5 +39,12 @@ namespace AccountTrackerLibrary.Data
         {
             return Context.TransactionTypes.Count();
         }
+
+        public int GetID(string name)
+        {
+            return Context.TransactionTypes
+                .Where(tt => tt.Name == name)
+                .SingleOrDefault().TransactionTypeID;
+        }
     }
 }

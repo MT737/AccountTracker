@@ -17,33 +17,18 @@ namespace AccountTrackerWebApp.Controllers
     /// </summary>
     public class DashboardController : BaseController
     {
-
-        //Private field
-        private TransactionRepository _transactionRepository = null;
-        private AccountRepository _accountRepository = null;
-        private CategoryRepository _categoryRepository = null;
-        private VendorRepository _vendorRepository = null;
-        
-        //Base constructor
-        public DashboardController()
-        {
-            _transactionRepository = new TransactionRepository(Context);
-            _accountRepository = new AccountRepository(Context);
-            _categoryRepository = new CategoryRepository(Context);
-            _vendorRepository = new VendorRepository(Context);
-        }
-
         public ActionResult Index()
         {
             //Instantiate viewmodel
-            var dashboardItems = new ViewModel();
+            //TODO Create a dashbaord viewmodel.
+            var vm = new ViewModel();
 
             //Complete viewmodel's properties required for dashboard view
-            dashboardItems.Transactions = GetTransactionsWithDetails();            
-            dashboardItems.AccountsWithBalances = GetAccountWithBalances();
-            dashboardItems.ByCategorySpending = GetCategorySpending();
-            dashboardItems.ByVendorSpending = GetVendorSpending();
-            return View(dashboardItems);
+            vm.Transactions = GetTransactionsWithDetails();            
+            vm.AccountsWithBalances = GetAccountWithBalances();
+            vm.ByCategorySpending = GetCategorySpending();
+            vm.ByVendorSpending = GetVendorSpending();
+            return View(vm);
         }
 
         private IList<VendorSpending> GetVendorSpending()
@@ -75,24 +60,7 @@ namespace AccountTrackerWebApp.Controllers
                     categorySpending.Add(categorySpendingHolder); 
                 }
             }
-
             return categorySpending;
-        }
-
-        public IList<AccountWithBalance> GetAccountWithBalances()
-        {
-            //Get list of accounts
-            IList<AccountWithBalance> accountsWithBalances = new List<AccountWithBalance>();
-            foreach (var account in _accountRepository.GetList())
-            {
-                //Set detailed values and get amount
-                AccountWithBalance accountWithBalanceHolder = new AccountWithBalance();
-                accountWithBalanceHolder.Name = account.Name;
-                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, account.IsAsset);
-                accountsWithBalances.Add(accountWithBalanceHolder);
-            }
-
-            return accountsWithBalances;
         }
     }
 }

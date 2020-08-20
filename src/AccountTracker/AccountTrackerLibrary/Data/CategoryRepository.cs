@@ -47,5 +47,12 @@ namespace AccountTrackerLibrary.Data
                 .Where(t => t.CategoryID == categoryID)
                 .ToList().Sum(t => t.Amount);
         }
+
+        public int GetID(string name)
+        {
+            return Context.Categories
+                .Where(c => c.Name == name)
+                .SingleOrDefault().CategoryID;
+        }
     }
 }

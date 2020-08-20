@@ -20,7 +20,7 @@ namespace AccountTrackerLibrary.Data
         public abstract int GetCount();
 
 
-        //Base methods
+        //CUD of CRUD
         /// <summary>
         /// Add entity to the DbSet and then save the changes to the database.
         /// </summary>
@@ -30,6 +30,7 @@ namespace AccountTrackerLibrary.Data
             Context.Set<TEntity>().Add(entity);
             Context.SaveChanges();
         }
+
 
         /// <summary>
         /// Set entity's state to modified and save the changes to the database.

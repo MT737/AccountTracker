@@ -1,0 +1,36 @@
+﻿@model AccountTrackerWebApp.ViewModels.ViewModel
+
+@{
+    ViewBag.Title = "Edit Transaction";
+}
+
+<h2>@ViewBag.Title</h2>
+    
+@using (Html.BeginForm())
+{
+    <!--TODO: Research better way to pass transaction ID back to controller.-->
+    @Html.HiddenFor(m => m.TransactionOfInterest.TransactionID)
+
+    <!--TODO: Issue - Validation Summary is showing even when there're no issues-->
+@Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
+
+    @Html.Partial("_TransactionForm")
+    
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <div class="col-md-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<!--Confirm script is required.-->
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,4 +1,4 @@
-﻿using AccountTrackerLibrary;
+﻿using AccountTrackerLibrary.Models;
 using AccountTrackerLibrary.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +6,7 @@ using System.Security.Authentication.ExtendedProtection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using static AccountTrackerWebApp.ViewModels.ViewModel;
 
 namespace AccountTrackerWebApp.Controllers
 {
@@ -13,7 +14,11 @@ namespace AccountTrackerWebApp.Controllers
     {
         //Tracking if the dispose method has already been called.
         private bool _disposed = false;
-        private TransactionRepository _transactionRepository = null;
+        protected TransactionRepository _transactionRepository = null;
+        protected TransactionTypeRepository _transactionTypeRepository = null;
+        protected AccountRepository _accountRepository = null;
+        protected CategoryRepository _categoryRepository = null;
+        protected VendorRepository _vendorRepository = null;
 
         //Property
         public Context Context { get; set; }
@@ -23,6 +28,10 @@ namespace AccountTrackerWebApp.Controllers
         {
             Context = new Context();
             _transactionRepository = new TransactionRepository(Context);
+            _transactionTypeRepository = new TransactionTypeRepository(Context);
+            _accountRepository = new AccountRepository(Context);
+            _categoryRepository = new CategoryRepository(Context);
+            _vendorRepository = new VendorRepository(Context);
         }
 
         public IList<Transaction> GetTransactionsWithDetails()
@@ -51,6 +60,25 @@ namespace AccountTrackerWebApp.Controllers
             _disposed = true;
 
             base.Dispose(disposing);
+        }
+
+        public IList<AccountWithBalance> GetAccountWithBalances()
+        {
+            //Get list of accounts
+            IList<AccountWithBalance> accountsWithBalances = new List<AccountWithBalance>();
+            foreach (var account in _accountRepository.GetList())
+            {
+                //Set detailed values and get amount
+                AccountWithBalance accountWithBalanceHolder = new AccountWithBalance();
+                accountWithBalanceHolder.AccountID = account.AccountID;
+                accountWithBalanceHolder.Name = account.Name;
+                accountWithBalanceHolder.IsAsset = account.IsAsset;
+                accountWithBalanceHolder.IsActive = account.IsActive;
+                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, account.IsAsset);
+                accountsWithBalances.Add(accountWithBalanceHolder);
+            }
+
+            return accountsWithBalances;
         }
     }
 }

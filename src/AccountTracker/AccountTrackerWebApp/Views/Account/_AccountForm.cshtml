@@ -1,0 +1,41 @@
+﻿@model AccountTrackerWebApp.ViewModels.ViewModel
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.AccountOfInterest.Name, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.AccountOfInterest.Name, "", new { @class = "form-control" })
+        </div>       
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.AccountOfInterest.IsAsset, new { @class = "control-label" })
+            @Html.CheckBoxFor(m => m.AccountOfInterest.IsAsset, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+</div>
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.AccountOfInterest.IsActive, new { @class = "control-label" })
+            @Html.CheckBoxFor(m => m.AccountOfInterest.IsActive, new { @class = "form-control" })
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.TransactionOfInterest.Amount, new { @class = "control-label" })
+        @Html.TextBoxFor(m => m.TransactionOfInterest.Amount, "", new { @class = "form-Control" })
+    </div>
+
+</div>
+
