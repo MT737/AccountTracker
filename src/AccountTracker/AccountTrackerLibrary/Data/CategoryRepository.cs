@@ -61,5 +61,18 @@ namespace AccountTrackerLibrary.Data
                 .Where(c => c.Name == name)
                 .SingleOrDefault().CategoryID;
         }
+
+        public void Absorption(int absorbedID, int absorbingID)
+        {
+            //TODO: this works for a small database, but for large scale, this method should be updated to perform a bulk update.
+            IQueryable<Transaction> catsToUpdate = Context.Transactions
+                .Where(c => c.CategoryID == absorbedID);
+
+            foreach (Transaction transaction in catsToUpdate)
+            {
+                transaction.CategoryID = absorbingID;                
+            }
+            Context.SaveChanges();
+        }
     }
 }

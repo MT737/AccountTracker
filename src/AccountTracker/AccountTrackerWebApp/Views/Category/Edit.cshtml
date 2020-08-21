@@ -1,16 +1,19 @@
 ﻿@model AccountTrackerWebApp.ViewModels.ViewModel
 
 @{
-    ViewBag.Title = "Add Category";
+    ViewBag.Title = "Edit Category";
 }
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
+    <!--TODO: Research better way to pass transaction ID back to controller.-->
+    @Html.HiddenFor(m => m.CategoryOfInterest.CategoryID)
+
     <!--TODO: Issue - validation summary showing even when there's no issues-->
     @Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
-    
+
     @Html.Partial("_CategoryForm")
 
     <div class="row">

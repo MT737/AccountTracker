@@ -19,7 +19,9 @@ namespace AccountTrackerWebApp.ViewModels
 
         //Properties
         public Transaction TransactionOfInterest { get; set; }  
+        public Category CategoryOfInterest { get; set; }
         public Account AccountOfInterest { get; set; }
+        public Category AbsorptionCategory { get; set; }
         public IList<Transaction> Transactions { get; set; }
         public IList<AccountWithBalance> AccountsWithBalances { get; set; }
         public IList<CategorySpending> ByCategorySpending { get; set; }
@@ -60,8 +62,18 @@ namespace AccountTrackerWebApp.ViewModels
         {
             TransactionTypesSelectList = new SelectList(transactionTypeRepository.GetList(), "TransactionTypeID", "Name");
             AccountSelectList = new SelectList(accountRepository.GetList(), "AccountID", "Name");
-            CategorySelectList = new SelectList(categoryRepository.GetList(), "CategoryID", "Name");
-            VendorSelectList = new SelectList(vendorRepository.GetList(), "VendorID", "Name");
+            VendorSelectList = InitVendorSelectList(vendorRepository);
+            CategorySelectList = InitCategorySelectList(categoryRepository);
+        }
+
+        public SelectList InitCategorySelectList(CategoryRepository categoryRepository)
+        {
+            return new SelectList(categoryRepository.GetList(), "CategoryID", "Name");
+        }
+
+        public SelectList InitVendorSelectList(VendorRepository vendorRepository)
+        {
+            return new SelectList(vendorRepository.GetList(), "VendorId", "Name");
         }
     }
 }
