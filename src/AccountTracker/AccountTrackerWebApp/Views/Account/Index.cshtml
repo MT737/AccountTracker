@@ -23,27 +23,31 @@
 <div class="row">
     <div class="col-md-12">
         <table class="table">
-            <tr>
-                <th>Account</th>
-                <th>Balance</th>
-                <th>Asset</th>
-                <th>Active</th>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            </tr>
-            @foreach (var account in Model)
-            {
+            <thead>
                 <tr>
-                    <td>@account.Name</td>
-                    <td style="text-align: right">$@account.Balance.ToString("#,##0.00")</td>
-                    <td>@account.IsAsset</td>
-                    <td>@account.IsActive</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Account", new { id = account.AccountID })" />
-                        <span class="glyphicon glyphicon-edit"></span>
-                    </td>
+                    <th>Account</th>
+                    <th>Balance</th>
+                    <th>Asset</th>
+                    <th>Active</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
                 </tr>
-            }
-        </table>
+            </thead>
+            <tbody>
+                @foreach (var account in Model)
+                {
+                    <tr>
+                        <td>@account.Name</td>
+                        <td style="text-align: right">$@account.Balance.ToString("#,##0.00")</td>
+                        <td>@account.IsAsset</td>
+                        <td>@account.IsActive</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Account", new { id = account.AccountID })" />
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+</table>
     </div>
 </div>

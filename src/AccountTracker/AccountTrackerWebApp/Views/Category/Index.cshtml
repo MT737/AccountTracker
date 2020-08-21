@@ -23,32 +23,36 @@
 <div class="row">
     <div class="col-md-12">
         <table class="table">
-            <tr>
-                <th>Category</th>
-                <th>Default</th>
-                <th>Displayed</th>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            </tr>
-            @foreach (var category in Model)
-            {
+            <thead>
                 <tr>
-                    <td>@category.Name</td>
-                    <td>@category.IsDefault</td>
-                    <td>@category.IsDisplayed</td>
-                    @if (!category.IsDefault)
-                    {
-                        <td>
-                            <a href="@Url.Action("Edit", "Category", new {id = category.CategoryID})" />
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("Delete", "Category", new {id = category.CategoryID})" />
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </td>
-                    }
+                    <th>Category</th>
+                    <th>Default</th>
+                    <th>Displayed</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td>@category.Name</td>
+                        <td>@category.IsDefault</td>
+                        <td>@category.IsDisplayed</td>
+                        @if (!category.IsDefault)
+                        {
+                            <td>
+                                <a href="@Url.Action("Edit", "Category", new {id = category.CategoryID})" />
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Delete", "Category", new {id = category.CategoryID})" />
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
         </table>
     </div>
 </div>
