@@ -41,6 +41,13 @@ namespace AccountTrackerLibrary.Data
             return Context.Categories.Count();
         }
 
+        public bool NameExists(Category category)
+        {
+            return Context.Categories
+                .Where(c => c.Name.ToLower() == category.Name.ToLower() && c.CategoryID != category.CategoryID)
+                .Any();
+        }
+
         public decimal GetCategorySpending(int categoryID)
         {
             return Context.Transactions

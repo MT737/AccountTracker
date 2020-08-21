@@ -94,10 +94,10 @@ namespace AccountTrackerLibrary.Data
             }
         }
 
-        public bool NameExists(string name, int accountID)
+        public bool NameExists(Account account)
         {
            return Context.Accounts
-                .Where(a => a.Name.ToLower() == name.ToLower() && a.AccountID != accountID)
+                .Where(a => a.Name.ToLower() == account.Name.ToLower() && a.AccountID != account.AccountID)
                 .Any();
         }
     }

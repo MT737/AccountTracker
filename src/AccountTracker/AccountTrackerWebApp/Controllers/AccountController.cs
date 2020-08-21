@@ -135,7 +135,7 @@ namespace AccountTrackerWebApp.Controllers
         private void ValidateAccount(Account accountOfInterest)
         {
             //New or updated Accounts cannot have the same name as currently existing accounts (except for the same account if editing).
-            if (_accountRepository.NameExists(accountOfInterest.Name, accountOfInterest.AccountID))
+            if (_accountRepository.NameExists(accountOfInterest))
             {
                 ModelState.AddModelError("accountOfInterest.Name", "The provided account name already exsits.");
             }
