@@ -1,7 +1,27 @@
-﻿
+﻿@model AccountTrackerLibrary.Models.Vendor
+
 @{
     ViewBag.Title = "Add Vendor";
 }
 
 <h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <!--TODO: Issue - validation summary showing even when there's no issues-->
+    @Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
+
+    @Html.Partial("_VendorForm")
+
+    <div class="row">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 

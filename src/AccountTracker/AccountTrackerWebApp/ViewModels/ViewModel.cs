@@ -19,9 +19,11 @@ namespace AccountTrackerWebApp.ViewModels
 
         //Properties
         public Transaction TransactionOfInterest { get; set; }  
-        public Category CategoryOfInterest { get; set; }
         public Account AccountOfInterest { get; set; }
+        public Category CategoryOfInterest { get; set; }
         public Category AbsorptionCategory { get; set; }
+        public Vendor VendorOfInterest { get; set; }
+        public Vendor AbsorptionVendor { get; set; }
         public IList<Transaction> Transactions { get; set; }
         public IList<AccountWithBalance> AccountsWithBalances { get; set; }
         public IList<CategorySpending> ByCategorySpending { get; set; }
