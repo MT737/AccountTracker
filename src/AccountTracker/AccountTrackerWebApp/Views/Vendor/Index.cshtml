@@ -4,59 +4,49 @@
     ViewBag.Title = "Vendors";
 }
 
-@Html.Partial("_message")
+@Html.Partial("_Message")
 
-
-<div class="row">
-    <div class="col-md-6">
-        <h2>@ViewBag.Title</h2>
-    </div>
-    <!--TODO: Buttons are floating in a weird spot. Fix this.-->
-    <div class="col-md-6">
-        <a href="@Url.Action("Add", "Vendor")" class="btn btn-primary btn-md pull-right">
-            <span class="glyphicon glyphicon-plus"></span>Add
-        </a>
-        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-md pull-right">
-            <span class="glyphicon glyphicon-step-backward"></span>Back
-        </a>
-    </div>
-</div>
+@Html.Partial("_IndexHeading")
 <div class="row">
     <div class="col-md-12">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Vendor</th>
-                    <th>Default</th>
-                    <th>Displayed</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var vendor in Model)
-                {
-                    <tr>
-                        <td>@vendor.Name</td>
-                        <td>@vendor.IsDefault</td>
-                        <td>@vendor.IsDisplayed</td>
-                        @if (!vendor.IsDefault)
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Vendor</th>
+                            <th>Default</th>
+                            <th>Displayed</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var vendor in Model)
                         {
+                            <tr>
+                                <td>@vendor.Name</td>
+                                <td>@vendor.IsDefault</td>
+                                <td>@vendor.IsDisplayed</td>
+                                @if (!vendor.IsDefault)
+                                {
 
-                            <td>
-                                <a href="@Url.Action("Edit", "Vendor", new {id = vendor.VendorID})" />
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </td>
-                            <td>
-                                <a href="@Url.Action("Delete", "Vendor", new {id = vendor.VendorID})" />
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Vendor", new {id = vendor.VendorID})" />
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Delete", "Vendor", new {id = vendor.VendorID})" />
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </td>
 
+                                }
+                            </tr>
                         }
-                    </tr>
-                }
-             </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div class="panel panel-default">
     </div>
 </div>
 

@@ -4,56 +4,47 @@
     ViewBag.Title = "Categories";
 }
 
-@Html.Partial("_message")
+@Html.Partial("_Message")
 
-<div class="row">
-    <div class="col-md-6">
-        <h2>@ViewBag.Title</h2>
-    </div>
-    <!--TODO: Buttons are floating in weird spot. Fix this.-->
-    <div class="col-md-6">
-        <a href="@Url.Action("Add", "Category")" class="btn btn-primary btn-md pull-right">
-            <span class="glyphicon glyphicon-plus"></span>Add
-        </a>
-        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-md pull-right">
-            <span class="glyphicon glyphicon-step-backward"></span>Back
-        </a>
-    </div>
-</div>
+@Html.Partial("_IndexHeading")
 <div class="row">
     <div class="col-md-12">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Default</th>
-                    <th>Displayed</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var category in Model)
-                {
-                    <tr>
-                        <td>@category.Name</td>
-                        <td>@category.IsDefault</td>
-                        <td>@category.IsDisplayed</td>
-                        @if (!category.IsDefault)
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Default</th>
+                            <th>Displayed</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model)
                         {
-                            <td>
-                                <a href="@Url.Action("Edit", "Category", new {id = category.CategoryID})" />
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </td>
-                            <td>
-                                <a href="@Url.Action("Delete", "Category", new {id = category.CategoryID})" />
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </td>
+                            <tr>
+                                <td>@category.Name</td>
+                                <td>@category.IsDefault</td>
+                                <td>@category.IsDisplayed</td>
+                                @if (!category.IsDefault)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Category", new {id = category.CategoryID})" />
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Delete", "Category", new {id = category.CategoryID})" />
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </td>
+                                }
+                            </tr>
                         }
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div class="panel panel-default">
     </div>
 </div>
 

@@ -21,17 +21,17 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
-                    <li>@Html.ActionLink("Transaction", "Index", "Transaction")</li>
-                    <li>@Html.ActionLink("Account", "Index", "Account")</li>
-                    <li>@Html.ActionLink("Category", "Index", "Category")</li>
-                    <li>@Html.ActionLink("Vendor", "Index", "Vendor")</li>
+                    <li>@Html.ActionLink("Transactions", "Index", "Transaction")</li>
+                    <li>@Html.ActionLink("Accounts", "Index", "Account")</li>
+                    <li>@Html.ActionLink("Categories", "Index", "Category")</li>
+                    <li>@Html.ActionLink("Vendors", "Index", "Vendor")</li>
                     <li>@Html.ActionLink("About", "About", "General")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "General")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content">        
         @RenderBody()
         <hr />
         <footer>

@@ -6,20 +6,7 @@
 
 @Html.Partial("_Message")
 
-<div class="row">
-    <div class="col-md-6">
-        <h2>@ViewBag.Title</h2>
-    </div>
-    <!--TODO: Buttons are floating in a weird spot. Fix this.-->
-    <div class="col-md-6">
-        <a href="@Url.Action("Add", "Transaction")" class="btn btn-primary btn-md pull-right" >
-            <span class="glyphicon glyphicon-plus"></span>Add
-        </a>
-        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-md pull-right">
-            <span class="glyphicon glyphicon-step-backward"></span>Back
-        </a>        
-    </div>
-</div>
+@Html.Partial("_IndexHeading")
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">

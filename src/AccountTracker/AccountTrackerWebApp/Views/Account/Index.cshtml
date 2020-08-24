@@ -4,50 +4,41 @@
     ViewBag.Title = "Accounts";
 }
 
-@Html.Partial("_message")
+@Html.Partial("_Message")
 
+@Html.Partial("_IndexHeading")
 <div class="row">
     <div class="col-md-6">
-        <h2>@ViewBag.Title</h2>
-    </div>
-    <!--TODO: Buttons are floating in a weird spot. Fix this.-->
-    <div class="col-md-6">
-        <a href="@Url.Action("Add", "Account")" class="btn btn-primary btn-md pull-right">
-            <span class="glyphicon glyphicon-plus"></span>Add
-        </a>
-        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-md pull-right">
-            <span class="glyphicon glyphicon-step-backward"></span>Back
-        </a>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Account</th>
-                    <th>Balance</th>
-                    <th>Asset</th>
-                    <th>Active</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var account in Model)
-                {
-                    <tr>
-                        <td>@account.Name</td>
-                        <td style="text-align: right">$@account.Balance.ToString("#,##0.00")</td>
-                        <td>@account.IsAsset</td>
-                        <td>@account.IsActive</td>
-                        <td>
-                            <a href="@Url.Action("Edit", "Account", new { id = account.AccountID })" />
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-</table>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Balance</th>
+                            <th>Asset</th>
+                            <th>Active</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var account in Model)
+                        {
+                            <tr>
+                                <td>@account.Name</td>
+                                <td style="text-align: right">$@account.Balance.ToString("#,##0.00")</td>
+                                <td>@account.IsAsset</td>
+                                <td>@account.IsActive</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Account", new { id = account.AccountID })" />
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div class="panel panel-default">
     </div>
 </div>
