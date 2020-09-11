@@ -1,4 +1,5 @@
-﻿using AccountTrackerLibrary.Models;
+﻿using AccountTrackerLibrary.Data;
+using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -7,14 +8,32 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using static AccountTrackerWebApp.ViewModels.ViewModel;
 
 namespace AccountTrackerWebApp.Controllers
 {
     /// <summary>
     /// Controller for the "Account" section of the website.
     /// </summary>
-    public class AccountController : BaseController
+    public class AccountController : Controller
     {
+        private AccountRepository _accountRepository = null;
+        private CategoryRepository _categoryRepository = null;
+        private TransactionRepository _transactionRepository = null;
+        private TransactionTypeRepository _transactionTypeRepository = null;
+        private VendorRepository _vendorRepository = null;
+
+        //Constructor [This is an excessive amount of work required just to make use of DI]
+        public AccountController(AccountRepository accountRepository, CategoryRepository categoryRepository, TransactionRepository transactionRepository,
+            TransactionTypeRepository transactionTypeRepository, VendorRepository vendorRepository)
+        {
+            _accountRepository = accountRepository;
+            _categoryRepository = categoryRepository;
+            _transactionRepository = transactionRepository;
+            _transactionTypeRepository = transactionTypeRepository;
+            _vendorRepository = vendorRepository;
+        }
+
         public ActionResult Index()
         {
             IList<ViewModel.AccountWithBalance> accounts = new List<ViewModel.AccountWithBalance>();
@@ -166,6 +185,26 @@ namespace AccountTrackerWebApp.Controllers
             {
                 vm.TransactionOfInterest.TransactionTypeID = _transactionTypeRepository.GetID("Payment From");
             }    
+        }
+
+        //TODO: This exact method is used in the dashboard controller as well. Put in a central location (DRY).
+        private IList<AccountWithBalance> GetAccountWithBalances()
+        {
+            //Get list of accounts
+            IList<AccountWithBalance> accountsWithBalances = new List<AccountWithBalance>();
+            foreach (var account in _accountRepository.GetList())
+            {
+                //Set detailed values and get amount
+                AccountWithBalance accountWithBalanceHolder = new AccountWithBalance();
+                accountWithBalanceHolder.AccountID = account.AccountID;
+                accountWithBalanceHolder.Name = account.Name;
+                accountWithBalanceHolder.IsAsset = account.IsAsset;
+                accountWithBalanceHolder.IsActive = account.IsActive;
+                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, account.IsAsset);
+                accountsWithBalances.Add(accountWithBalanceHolder);
+            }
+
+            return accountsWithBalances;
         }
     }
 }

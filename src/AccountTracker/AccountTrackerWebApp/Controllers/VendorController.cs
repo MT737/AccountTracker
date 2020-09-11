@@ -1,4 +1,5 @@
-﻿using AccountTrackerLibrary.Models;
+﻿using AccountTrackerLibrary.Data;
+using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,15 @@ namespace AccountTrackerWebApp.Controllers
     /// <summary>
     /// Controller for the "Vendor" section of the website.
     /// </summary>
-    public class VendorController : BaseController
+    public class VendorController : Controller
     {
+        private VendorRepository _vendorRepository = null;
+
+        public VendorController(VendorRepository vendorRepository)
+        {
+            _vendorRepository = vendorRepository;
+        }
+
         public ActionResult Index()
         {
             IList<Vendor> vendors = new List<Vendor>();

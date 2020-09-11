@@ -6,21 +6,33 @@
 
 @Html.Partial("_Message")
 
-@Html.Partial("_IndexHeading")
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="btn-toolbar">
+                @ViewBag.Title
+                <a href="@Url.Action("Add")" class="btn btn-primary btn-md pull-right">
+                    <span class="glyphicon glyphicon-plus"></span>Add
+                </a>
+                <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-md pull-right">
+                    <span class="glyphicon glyphicon-step-backward"></span>Back
+                </a>
+            </h1>
+        </div>
+    </div>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
-            <div class="panel-body">
+            <div class="panel-body" style="overflow:scroll">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Type</th>
+                            <th class="hidden-xs">Type</th>
                             <th>Account</th>
-                            <th>Category</th>
-                            <th>Vendor</th>
+                            <th class="hidden-xs hidden-sm">Category</th>
+                            <th class="hidden-xs hidden-sm">Vendor</th>
                             <th>Amount</th>
-                            <th>Description</th>
+                            <th class="hidden-xs hidden-sm">Description</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
                         </tr>
@@ -30,15 +42,17 @@
                         {
                         <tr>
                             <td>@transaction.TransactionDate.ToString("MM/dd/yyyy")</td>
-                            <td>@transaction.TransactionType.Name</td>
+                            <td class="hidden-xs">@transaction.TransactionType.Name</td>
                             <td>@transaction.Account.Name</td>
-                            <td>@transaction.Category.Name</td>
-                            <td>@transaction.Vendor.Name</td>
+                            <td class="hidden-xs hidden-sm">@transaction.Category.Name</td>
+                            <td class="hidden-xs hidden-sm">@transaction.Vendor.Name</td>
                             <td style="text-align: right">$@transaction.Amount.ToString("#,##0.00")</td>
-                            <td>@transaction.Description</td>
+                            <td class="hidden-xs hidden-sm">@transaction.Description</td>
                             <td>
                                 <a href="@Url.Action("Edit", "Transaction", new { id = transaction.TransactionID })" />
                                 <span class="glyphicon glyphicon-edit"></span>
+                            </td>
+                            <td>
                                 <a href="@Url.Action("Delete", "Transaction", new { id = transaction.TransactionID })" />
                                 <span class="glyphicon glyphicon-trash"></span>
                             </td>

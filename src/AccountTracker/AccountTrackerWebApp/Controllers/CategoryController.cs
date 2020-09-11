@@ -1,4 +1,5 @@
-﻿using AccountTrackerLibrary.Models;
+﻿using AccountTrackerLibrary.Data;
+using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,15 @@ namespace AccountTrackerWebApp.Controllers
     /// <summary>
     /// Controller for the "Category" section of the website.
     /// </summary>
-    public class CategoryController : BaseController
+    public class CategoryController : Controller
     {
+        private CategoryRepository _categoryRepository = null;
+
+        public CategoryController(CategoryRepository categoryRepository)
+        {
+            _categoryRepository = categoryRepository;
+        }
+
         public ActionResult Index()
         {   
             IList<Category> categories = new List<Category>();
@@ -98,7 +106,6 @@ namespace AccountTrackerWebApp.Controllers
 
             return View(vm);
         }
-
 
         public ActionResult Delete(int? id)
         {

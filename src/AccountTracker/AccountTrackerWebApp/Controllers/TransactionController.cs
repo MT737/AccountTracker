@@ -13,8 +13,24 @@ namespace AccountTrackerWebApp.Controllers
     /// <summary>
     /// Controller for the "Transction" Portion of the website.
     /// </summary>
-    public class TransactionController : BaseController
+    public class TransactionController : Controller
     {
+        private AccountRepository _accountRepository = null;
+        private CategoryRepository _categoryRepository = null;
+        private TransactionRepository _transactionRepository = null;
+        private TransactionTypeRepository _transactionTypeRepository = null;
+        private VendorRepository _vendorRepository = null;
+        
+        public TransactionController(AccountRepository accountRepository, CategoryRepository categoryRepository, TransactionRepository transactionRepository,
+            TransactionTypeRepository transactionTypeRepository, VendorRepository vendorRepository)
+        {
+            _accountRepository = accountRepository;
+            _categoryRepository = categoryRepository;
+            _transactionRepository = transactionRepository;
+            _transactionTypeRepository = transactionTypeRepository;
+            _vendorRepository = vendorRepository;
+        }
+
         //Index page
         public ActionResult Index()
         {
@@ -149,5 +165,18 @@ namespace AccountTrackerWebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        //TODO: This exact method is used in the Dashboard controller as well. Put in a central location (DRY).
+        public IList<Transaction> GetTransactionsWithDetails()
+        {
+            //Get get a list of transactions to gain access to transaction ids
+            IList<Transaction> transactions = new List<Transaction>();
+            foreach (var transaction in _transactionRepository.GetList())
+            {
+                //Get the detailed data for each transaction and add it to the IList of transactions
+                transactions.Add(_transactionRepository.Get(transaction.TransactionID, true));
+            }
+
+            return transactions;
+        }
     }
 }
