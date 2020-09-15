@@ -3,6 +3,7 @@ using AccountTrackerLibrary.Data;
 using AccountTrackerLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
@@ -33,7 +34,6 @@ namespace AccountTrackerWebApp.ViewModels
         public SelectList CategorySelectList { get; set; }
         public SelectList VendorSelectList { get; set; }
 
-
         //BalanceByAccount class. Leaving it as a member of the DashboardViewModel for now as it's only needed for the dashboard.
         public class AccountWithBalance
         {
@@ -60,10 +60,10 @@ namespace AccountTrackerWebApp.ViewModels
 
         //TODO: Create individual list inits so as to not mass pull information when not necessary.
         //Initialize the select lists.
-        public void Init(TransactionTypeRepository transactionTypeRepository, AccountRepository accountRepository, CategoryRepository categoryRepository, VendorRepository vendorRepository)
+        public void Init(string userID, TransactionTypeRepository transactionTypeRepository, AccountRepository accountRepository, CategoryRepository categoryRepository, VendorRepository vendorRepository)
         {
             TransactionTypesSelectList = new SelectList(transactionTypeRepository.GetList(), "TransactionTypeID", "Name");
-            AccountSelectList = new SelectList(accountRepository.GetList(), "AccountID", "Name");
+            AccountSelectList = new SelectList(accountRepository.GetList(userID), "AccountID", "Name");
             VendorSelectList = InitVendorSelectList(vendorRepository);
             CategorySelectList = InitCategorySelectList(categoryRepository);
         }

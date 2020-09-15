@@ -14,7 +14,7 @@ namespace AccountTrackerLibrary.Data
         }
 
         //TODO Implement TransType Get
-        public override TransactionType Get(int id, bool includeRelatedEntities = true)
+        public TransactionType Get(int id, bool includeRelatedEntities = true)
         {
             var transactionType = Context.TransactionTypes.AsQueryable();
 
@@ -28,14 +28,14 @@ namespace AccountTrackerLibrary.Data
                 .SingleOrDefault();
         }
 
-        public override IList<TransactionType> GetList()
+        public IList<TransactionType> GetList()
         {
             return Context.TransactionTypes
                 .OrderBy(t => t.TransactionTypeID)
                 .ToList();
         }
 
-        public override int GetCount()
+        public int GetCount()
         {
             return Context.TransactionTypes.Count();
         }

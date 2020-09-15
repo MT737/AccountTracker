@@ -13,8 +13,7 @@ namespace AccountTrackerLibrary.Data
         {
         }
 
-        //TODO Implement Category Get
-        public override Category Get(int id, bool includeRelatedEntities = true)
+        public  Category Get(int id, bool includeRelatedEntities = true)
         {
             var category = Context.Categories.AsQueryable();
 
@@ -28,15 +27,14 @@ namespace AccountTrackerLibrary.Data
                 .SingleOrDefault();
         }
 
-        //TODO Implement Category Get list
-        public override IList<Category> GetList()
+        public IList<Category> GetList()
         {
             return Context.Categories
                 .OrderBy(c => c.Name)
                 .ToList();
         }
 
-        public override int GetCount()
+        public int GetCount()
         {
             return Context.Categories.Count();
         }
@@ -48,10 +46,10 @@ namespace AccountTrackerLibrary.Data
                 .Any();
         }
 
-        public decimal GetCategorySpending(int categoryID)
+        public decimal GetCategorySpending(int categoryID, string userID)
         {
             return Context.Transactions
-                .Where(t => t.CategoryID == categoryID)
+                .Where(t => t.CategoryID == categoryID && t.UserID == userID)
                 .ToList().Sum(t => t.Amount);
         }
 
@@ -65,6 +63,7 @@ namespace AccountTrackerLibrary.Data
         public void Absorption(int absorbedID, int absorbingID)
         {
             //TODO: this works for a small database, but for large scale, this method should be updated to perform a bulk update.
+            //TODO: this is dangerous considering any user could change categories. Should make all of these tables user owned.
             IQueryable<Transaction> catsToUpdate = Context.Transactions
                 .Where(c => c.CategoryID == absorbedID);
 

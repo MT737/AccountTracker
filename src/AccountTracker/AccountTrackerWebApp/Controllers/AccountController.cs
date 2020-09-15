@@ -1,6 +1,7 @@
 ﻿using AccountTrackerLibrary.Data;
 using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,8 +37,9 @@ namespace AccountTrackerWebApp.Controllers
 
         public ActionResult Index()
         {
+            var userID = User.Identity.GetUserId();
             IList<ViewModel.AccountWithBalance> accounts = new List<ViewModel.AccountWithBalance>();
-            accounts = GetAccountWithBalances();
+            accounts = GetAccountWithBalances(userID);
 
             return View(accounts);
         }
@@ -56,19 +58,21 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Add(ViewModel vm)
         {
             if (vm.AccountOfInterest.Name != null)
             {
                 //Validate the new account
-                ValidateAccount(vm.AccountOfInterest);
+                vm.AccountOfInterest.UserID = User.Identity.GetUserId();
+                ValidateAccount(vm.AccountOfInterest, vm.AccountOfInterest.UserID);
 
                 //Confirm valid modelstate
                 if (ModelState.IsValid)
                 {
                     //Add the account to the account table in the DB.
                     Account account = new Account();
-                    account = vm.AccountOfInterest;
+                    account = vm.AccountOfInterest;                    
                     _accountRepository.Add(account);
 
                     //Add a transaction to the transaction table in the DB to create the initial account balance.                
@@ -84,7 +88,6 @@ namespace AccountTrackerWebApp.Controllers
             return View(vm);
         }
 
-
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -92,26 +95,30 @@ namespace AccountTrackerWebApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            var userID = User.Identity.GetUserId();
+
             ViewModel vm = new ViewModel();
             vm.TransactionOfInterest = new Transaction();
-            vm.AccountOfInterest = _accountRepository.Get((int)id);            
-            vm.TransactionOfInterest.Amount = _accountRepository.GetBalance((int)id, vm.AccountOfInterest.IsAsset);
+            vm.AccountOfInterest = _accountRepository.Get((int)id, userID);            
+            vm.TransactionOfInterest.Amount = _accountRepository.GetBalance((int)id, userID, vm.AccountOfInterest.IsAsset);
 
             return View(vm);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(ViewModel vm)
         {
             if (vm.AccountOfInterest.Name != null)
             {
                 //Validate the account
-                ValidateAccount(vm.AccountOfInterest);
+                vm.AccountOfInterest.UserID = User.Identity.GetUserId();
+                ValidateAccount(vm.AccountOfInterest, vm.AccountOfInterest.UserID);
 
                 if (ModelState.IsValid)
                 {
                     //Grab current balance before updating the DB
-                    decimal currentBalance = _accountRepository.GetBalance(vm.AccountOfInterest.AccountID, vm.AccountOfInterest.IsAsset);
+                    decimal currentBalance = _accountRepository.GetBalance(vm.AccountOfInterest.AccountID, vm.AccountOfInterest.UserID, vm.AccountOfInterest.IsAsset);
 
                     //Update the account table in the DB
                     Account account = new Account();
@@ -151,10 +158,10 @@ namespace AccountTrackerWebApp.Controllers
         //    return HttpNotFound();
         //}
 
-        private void ValidateAccount(Account accountOfInterest)
+        private void ValidateAccount(Account accountOfInterest, string userID)
         {
             //New or updated Accounts cannot have the same name as currently existing accounts (except for the same account if editing).
-            if (_accountRepository.NameExists(accountOfInterest))
+            if (_accountRepository.NameExists(accountOfInterest, userID))
             {
                 ModelState.AddModelError("accountOfInterest.Name", "The provided account name already exsits.");
             }
@@ -162,7 +169,7 @@ namespace AccountTrackerWebApp.Controllers
 
         private void CompleteAccountTransaction(ViewModel vm, bool newAccount)
         {
-            vm.TransactionOfInterest.AccountID = _accountRepository.GetID(vm.AccountOfInterest.Name);
+            vm.TransactionOfInterest.AccountID = _accountRepository.GetID(vm.AccountOfInterest.Name, vm.AccountOfInterest.UserID);
             vm.TransactionOfInterest.VendorID = _vendorRepository.GetID("N/A");
             vm.TransactionOfInterest.TransactionDate = DateTime.Now.Date;
             
@@ -188,11 +195,11 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the dashboard controller as well. Put in a central location (DRY).
-        private IList<AccountWithBalance> GetAccountWithBalances()
+        private IList<AccountWithBalance> GetAccountWithBalances(string userID)
         {
             //Get list of accounts
             IList<AccountWithBalance> accountsWithBalances = new List<AccountWithBalance>();
-            foreach (var account in _accountRepository.GetList())
+            foreach (var account in _accountRepository.GetList(userID))
             {
                 //Set detailed values and get amount
                 AccountWithBalance accountWithBalanceHolder = new AccountWithBalance();
@@ -200,7 +207,7 @@ namespace AccountTrackerWebApp.Controllers
                 accountWithBalanceHolder.Name = account.Name;
                 accountWithBalanceHolder.IsAsset = account.IsAsset;
                 accountWithBalanceHolder.IsActive = account.IsActive;
-                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, account.IsAsset);
+                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, userID, account.IsAsset);
                 accountsWithBalances.Add(accountWithBalanceHolder);
             }
 

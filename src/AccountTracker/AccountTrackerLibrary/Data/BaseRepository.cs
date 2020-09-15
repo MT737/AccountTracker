@@ -15,12 +15,6 @@ namespace AccountTrackerLibrary.Data
             Context = context;
         }
 
-        //Abstracts
-        public abstract TEntity Get(int id, bool includeRelatedEntities = true);
-        public abstract IList<TEntity> GetList();
-        public abstract int GetCount();
-
-
         //CUD of CRUD
         /// <summary>
         /// Add entity to the DbSet and then save the changes to the database.
@@ -31,7 +25,6 @@ namespace AccountTrackerLibrary.Data
             Context.Set<TEntity>().Add(entity);
             Context.SaveChanges();
         }
-
 
         /// <summary>
         /// Set entity's state to modified and save the changes to the database.

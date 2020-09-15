@@ -39,6 +39,7 @@ namespace AccountTrackerWebApp.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Add(ViewModel vm)
         {
             //Don't allow users to add a default category. 
@@ -86,6 +87,7 @@ namespace AccountTrackerWebApp.Controllers
 
         //TODO: Don't need VM for this, as only a category object is required. Consider simplifying this and the ViewModel.
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(ViewModel vm)
         {
             if (vm.CategoryOfInterest.Name != null)
@@ -134,6 +136,7 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(ViewModel vm)
         {
             bool errorMessageSet = false;            

@@ -12,8 +12,13 @@ namespace AccountTrackerLibrary.Models
 {
     public class Transaction
     {
-        //Properties    
+        //Properties   
         public int TransactionID { get; set; }
+        
+        public User User { get; set; }
+        
+        [Required]
+        public string UserID { get; set; }
 
         [Required, Display(Name = "Date")]        
         public DateTime TransactionDate { get; set; }
@@ -41,5 +46,34 @@ namespace AccountTrackerLibrary.Models
         public Account Account { get; set; }
         public Category Category { get; set; }
         public Vendor Vendor { get; set; }
+
+        /// <summary>
+        /// Default blank constructor to allow for empty placeholder constructors.
+        /// </summary>
+        public Transaction()
+        { }
+
+        /// <summary>
+        /// Constructor for creating transactions.
+        /// </summary>
+        /// <param name="user">User for the transaction.</param>
+        /// <param name="transactionDate">Date of the transaction.</param>
+        /// <param name="transactionTypeID">Type of transaction "Payment To" or "Payment From".</param>
+        /// <param name="accountID">Account associated to the transaction.</param>
+        /// <param name="categoryID">Transaction category</param>
+        /// <param name="vendorID">Transaction vendor</param>
+        /// <param name="amount">Transaction amount</param>
+        /// <param name="description">Transaction description</param>
+        public Transaction(User user, DateTime transactionDate, int transactionTypeID, int accountID, int categoryID, int vendorID, decimal amount, string description)
+        {
+            UserID = user.Id;
+            TransactionDate = transactionDate;
+            TransactionTypeID = transactionTypeID;
+            AccountID = accountID;
+            CategoryID = categoryID;
+            VendorID = vendorID;
+            Amount = amount;
+            Description = description;
+        }
     }
 }

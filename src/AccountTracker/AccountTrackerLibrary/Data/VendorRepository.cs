@@ -14,8 +14,7 @@ namespace AccountTrackerLibrary.Data
 
         }
 
-        //TODO Implement Vendor get
-        public override Vendor Get(int id, bool includeRelatedEntities = true)
+        public Vendor Get(int id, bool includeRelatedEntities = true)
         {
             var vendor = Context.Vendors.AsQueryable();
 
@@ -29,23 +28,22 @@ namespace AccountTrackerLibrary.Data
                 .SingleOrDefault();
         }
 
-        //TODO Implement Vendor list
-        public override IList<Vendor> GetList()
+        public IList<Vendor> GetList()
         {
             return Context.Vendors
                 .OrderBy(v => v.Name)
                 .ToList();
         }
         
-        public override int GetCount()
+        public int GetCount()
         {
             return Context.Vendors.Count();
         }
 
-        public decimal GetAmount(int vendorID)
+        public decimal GetAmount(int vendorID, string userID)
         {
             return Context.Transactions
-                .Where(t => t.VendorID == vendorID)
+                .Where(t => t.VendorID == vendorID && t.UserID == userID)
                 .ToList().Sum(t => t.Amount);
         }
 

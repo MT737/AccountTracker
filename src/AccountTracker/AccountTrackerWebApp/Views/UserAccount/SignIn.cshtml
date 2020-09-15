@@ -1,0 +1,50 @@
+﻿@model AccountTrackerWebApp.ViewModels.AccountSignInViewModel
+
+@{
+    ViewBag.Title = "SignIn";
+}
+
+<h2>ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("The following errors were found:", new { @class = "alert alert-danger" })
+
+    <div class="row">
+        
+        <div class="col-md-6">
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Password, new { @class = "form-contorl", type = "password" })
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        @Html.CheckBoxFor(m => m.RememberMe) @Html.DisplayNameFor(m => m.RememberMe)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">            
+            <div class="pad-top">
+                <button type="submit" class="btn btn-success btn-lg margin-right">
+                    <span class="glyphicon glyphicon-save"></span> Sign In
+                </button> 
+            </div>
+        </div>
+
+    </div>
+}
+
+<p style="margin-top: 50px">
+    <strong>Don't have an account?</strong> @Html.ActionLink("Click here", "Register", "UserAccount") to create an account.
+</p>

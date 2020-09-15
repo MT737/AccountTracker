@@ -38,6 +38,7 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Add(Vendor vendor)
         {
             //Don't allow users to add a default vendor
@@ -83,6 +84,7 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(Vendor vendor)
         {
             //Make sure to validate and don't allow edit of default vendors
@@ -131,6 +133,7 @@ namespace AccountTrackerWebApp.Controllers
         }
             
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(ViewModel vm)
         {
             bool errorMessageSet = false;

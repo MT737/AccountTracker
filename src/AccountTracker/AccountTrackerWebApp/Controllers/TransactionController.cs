@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace AccountTrackerWebApp.Controllers
 {
@@ -36,9 +37,10 @@ namespace AccountTrackerWebApp.Controllers
         {
             //Instantiate viewmodel
             var vm = new ViewModel();
+            var userID = User.Identity.GetUserId();
 
             //Complete viewmodel property required for transaction view
-            vm.Transactions = GetTransactionsWithDetails();
+            vm.Transactions = GetTransactionsWithDetails(userID);
 
             return View(vm);
         }
@@ -54,31 +56,33 @@ namespace AccountTrackerWebApp.Controllers
             //Preset default values
             vm.TransactionOfInterest.TransactionDate = DateTime.Now.Date;
             vm.TransactionOfInterest.Amount = 0.00M;
+            vm.TransactionOfInterest.UserID = User.Identity.GetUserId();
 
             //TODO: Consider limiting the select list items. Probably shouldn't allow users to select new account balance.
             //Initialize set list items.
-            vm.Init(_transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
+            vm.Init(vm.TransactionOfInterest.UserID, _transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
 
             return View(vm);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Add(ViewModel vm)
         {
+            //Don't trust the passed userID. 
+            vm.TransactionOfInterest.UserID = User.Identity.GetUserId(); 
+            
             //TODO: Confirm validation requirements.
-
             if (ModelState.IsValid)
             {
-                Transaction transaction = new Transaction();
-                transaction = vm.TransactionOfInterest;
-                _transactionRepository.Add(transaction);
+                 _transactionRepository.Add(vm.TransactionOfInterest);
 
                 TempData["Message"] = "Transaction successfully added.";
 
                 return RedirectToAction("Index");
             }
 
-            vm.Init(_transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
+            vm.Init(vm.TransactionOfInterest.UserID, _transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
             return View(vm);
         }
 
@@ -91,7 +95,8 @@ namespace AccountTrackerWebApp.Controllers
             }
 
             //Get transaction if it exists.
-            Transaction transaction = _transactionRepository.Get((int)id, true);
+            var userID = User.Identity.GetUserId();
+            Transaction transaction = _transactionRepository.Get((int)id, userID, true);
             
             //Confirm transaction exists.
             if (transaction == null)
@@ -103,32 +108,36 @@ namespace AccountTrackerWebApp.Controllers
             var vm = new ViewModel { TransactionOfInterest = transaction };
             
             //Initialize select list items
-            vm.Init(_transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
+            vm.Init(vm.TransactionOfInterest.UserID, _transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
            
             //Return the view
             return View(vm);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(ViewModel vm)
         {
             //TODO: Currently allowing edit even when nothing is changed. Fix that.
             //TODO: Confirm additional validation requirements.
+            
+            vm.TransactionOfInterest.UserID = User.Identity.GetUserId();
+
+            //TODO: protect against clients manipulating the URL. That is, confirm again that the userID and transactionID combo exists before attempting delete.
+            //___Is Owned by user.
 
             //If model state is valid, update the db and redirect to index.
             if (ModelState.IsValid)
             {
-                Transaction transaction = vm.TransactionOfInterest;
-
-                _transactionRepository.Update(transaction);
-
+                //Don't trust client passed userID
+                _transactionRepository.Update(vm.TransactionOfInterest);
                 TempData["Message"] = "Your transaction was updated successfully.";
 
                 return RedirectToAction("Index");
             }
 
             //If model state is in error, reinit the select lists and call the edit view again.
-            vm.Init(_transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
+            vm.Init(vm.TransactionOfInterest.UserID, _transactionTypeRepository, _accountRepository, _categoryRepository, _vendorRepository);
             return View(vm);
         }
 
@@ -142,7 +151,8 @@ namespace AccountTrackerWebApp.Controllers
             }
 
             //Get transaction if it exists.
-            Transaction transaction = _transactionRepository.Get((int)id, true);
+            var userID = User.Identity.GetUserId();
+            Transaction transaction = _transactionRepository.Get((int)id, userID, true);
 
             //Confirm transaction exists.
             if (transaction == null)
@@ -158,6 +168,7 @@ namespace AccountTrackerWebApp.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
             _transactionRepository.Delete(id);
@@ -166,14 +177,14 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the Dashboard controller as well. Put in a central location (DRY).
-        public IList<Transaction> GetTransactionsWithDetails()
+        public IList<Transaction> GetTransactionsWithDetails(string userID)
         {
             //Get get a list of transactions to gain access to transaction ids
             IList<Transaction> transactions = new List<Transaction>();
-            foreach (var transaction in _transactionRepository.GetList())
+            foreach (var transaction in _transactionRepository.GetList(userID))
             {
                 //Get the detailed data for each transaction and add it to the IList of transactions
-                transactions.Add(_transactionRepository.Get(transaction.TransactionID, true));
+                transactions.Add(_transactionRepository.Get(transaction.TransactionID, userID, true));
             }
 
             return transactions;

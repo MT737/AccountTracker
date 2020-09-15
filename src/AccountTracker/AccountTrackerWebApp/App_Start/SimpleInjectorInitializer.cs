@@ -3,9 +3,14 @@
 namespace AccountTrackerWebApp.App_Start
 {
     using System.Reflection;
+    using System.Web;
     using System.Web.Mvc;
     using AccountTrackerLibrary.Data;
     using AccountTrackerLibrary.Models;
+    using AccountTrackerLibrary.Security;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.Owin;
     using SimpleInjector;
     using SimpleInjector.Integration.Web;
     using SimpleInjector.Integration.Web.Mvc;
@@ -29,13 +34,25 @@ namespace AccountTrackerWebApp.App_Start
      
         private static void InitializeContainer(Container container)
         {
-            // For instance:
             container.Register<Context>(Lifestyle.Scoped);
             container.Register<AccountRepository>(Lifestyle.Scoped);
             container.Register<CategoryRepository>(Lifestyle.Scoped);
             container.Register<TransactionRepository>(Lifestyle.Scoped);
             container.Register<TransactionTypeRepository>(Lifestyle.Scoped);
             container.Register<VendorRepository>(Lifestyle.Scoped);
+            container.Register<ApplicationUserManager>(Lifestyle.Scoped);
+            container.Register<ApplicationSignInManager>(Lifestyle.Scoped);
+
+            //If DI container is verrifying, supply our own authentication. This prevents an exception.
+            container.Register(() => container.IsVerifying
+                ? new OwinContext().Authentication
+                : HttpContext.Current.GetOwinContext().Authentication,
+            Lifestyle.Scoped);
+
+            //Need to specify the constructor for UserStore. Use the Context instance generated above for the constructor.
+            container.Register<IUserStore<User>>(() =>
+                new UserStore<User>(container.GetInstance<Context>()),
+            Lifestyle.Scoped);
         }
     }
 }

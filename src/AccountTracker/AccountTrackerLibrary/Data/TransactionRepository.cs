@@ -13,9 +13,8 @@ namespace AccountTrackerLibrary.Data
         public TransactionRepository(Context context) : base(context)
         {
         }
-
-        //TODO Implement Transaction get
-        public override Transaction Get(int id, bool includeRelatedEntities = true)
+                
+        public Transaction Get(int id, string userID, bool includeRelatedEntities = true)
         {
             var transaction = Context.Transactions.AsQueryable();
 
@@ -29,22 +28,23 @@ namespace AccountTrackerLibrary.Data
             }
 
             return transaction                
-                .Where(t => t.TransactionID == id)
+                .Where(t => t.TransactionID == id && t.UserID == userID)
                 .SingleOrDefault();
         }
 
-        public override IList<Transaction> GetList()
+        public IList<Transaction> GetList(string userID)
         {
             return Context.Transactions
                 .Include(tt => tt.TransactionType)
                 .Include(a => a.Account)
+                .Where(t => t.UserID == userID)
                 .OrderByDescending(t => t.TransactionID)
                 .ToList();
         }
 
-        public override int GetCount()
+        public int GetCount(string userID)
         {
-            return Context.Transactions.Count();
+            return Context.Transactions.Where(t => t.UserID == userID).Count();
         }
     }
 }
