@@ -2,6 +2,7 @@
 using AccountTrackerLibrary.Data;
 using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations.Infrastructure;
@@ -38,16 +39,17 @@ namespace AccountTrackerWebApp.Controllers
             //Instantiate viewmodel
             //TODO Create a dashbaord viewmodel.
             var vm = new ViewModel();
+            var userID = User.Identity.GetUserId();
 
             //Complete viewmodel's properties required for dashboard view
-            vm.Transactions = GetTransactionsWithDetails();            
-            vm.AccountsWithBalances = GetAccountWithBalances();
-            vm.ByCategorySpending = GetCategorySpending();
-            vm.ByVendorSpending = GetVendorSpending();
+            vm.Transactions = GetTransactionsWithDetails(userID);            
+            vm.AccountsWithBalances = GetAccountWithBalances(userID);
+            vm.ByCategorySpending = GetCategorySpending(userID);
+            vm.ByVendorSpending = GetVendorSpending(userID);
             return View(vm);
         }
 
-        private IList<VendorSpending> GetVendorSpending()
+        private IList<VendorSpending> GetVendorSpending(string userID)
         {
             IList<VendorSpending> vendorSpending = new List<VendorSpending>();
             foreach (var vendor in _vendorRepository.GetList())
@@ -56,14 +58,14 @@ namespace AccountTrackerWebApp.Controllers
                 {
                     VendorSpending vendorSpendingHolder = new VendorSpending();
                     vendorSpendingHolder.Name = vendor.Name;
-                    vendorSpendingHolder.Amount = _vendorRepository.GetAmount(vendor.VendorID);
+                    vendorSpendingHolder.Amount = _vendorRepository.GetAmount(vendor.VendorID, userID);
                     vendorSpending.Add(vendorSpendingHolder);
                 }
             }
             return vendorSpending;
         }
 
-        private IList<CategorySpending> GetCategorySpending()
+        private IList<CategorySpending> GetCategorySpending(string userID)
         {
             IList<CategorySpending> categorySpending = new List<CategorySpending>();
             foreach (var category in _categoryRepository.GetList())
@@ -72,7 +74,7 @@ namespace AccountTrackerWebApp.Controllers
                 {
                     CategorySpending categorySpendingHolder = new CategorySpending();
                     categorySpendingHolder.Name = category.Name;
-                    categorySpendingHolder.Amount = _categoryRepository.GetCategorySpending(category.CategoryID);
+                    categorySpendingHolder.Amount = _categoryRepository.GetCategorySpending(category.CategoryID, userID);
                     categorySpending.Add(categorySpendingHolder); 
                 }
             }
@@ -80,11 +82,11 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the account controller as well. Put in a central location (DRY).
-        private IList<AccountWithBalance> GetAccountWithBalances()
+        private IList<AccountWithBalance> GetAccountWithBalances(string userID)
         {
             //Get list of accounts
             IList<AccountWithBalance> accountsWithBalances = new List<AccountWithBalance>();
-            foreach (var account in _accountRepository.GetList())
+            foreach (var account in _accountRepository.GetList(userID))
             {
                 //Set detailed values and get amount
                 AccountWithBalance accountWithBalanceHolder = new AccountWithBalance();
@@ -92,7 +94,7 @@ namespace AccountTrackerWebApp.Controllers
                 accountWithBalanceHolder.Name = account.Name;
                 accountWithBalanceHolder.IsAsset = account.IsAsset;
                 accountWithBalanceHolder.IsActive = account.IsActive;
-                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, account.IsAsset);
+                accountWithBalanceHolder.Balance = _accountRepository.GetBalance(account.AccountID, userID, account.IsAsset);
                 accountsWithBalances.Add(accountWithBalanceHolder);
             }
 
@@ -100,14 +102,14 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the transaction controller as well. Put in a central location (DRY).
-        public IList<Transaction> GetTransactionsWithDetails()
+        public IList<Transaction> GetTransactionsWithDetails(string userID)
         {
             //Get get a list of transactions to gain access to transaction ids
             IList<Transaction> transactions = new List<Transaction>();
-            foreach (var transaction in _transactionRepository.GetList())
+            foreach (var transaction in _transactionRepository.GetList(userID))
             {
                 //Get the detailed data for each transaction and add it to the IList of transactions
-                transactions.Add(_transactionRepository.Get(transaction.TransactionID, true));
+                transactions.Add(_transactionRepository.Get(transaction.TransactionID, userID, true));
             }
 
             return transactions;

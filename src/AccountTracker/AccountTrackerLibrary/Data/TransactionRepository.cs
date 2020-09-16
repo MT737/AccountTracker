@@ -46,5 +46,10 @@ namespace AccountTrackerLibrary.Data
         {
             return Context.Transactions.Where(t => t.UserID == userID).Count();
         }
+
+        public bool UserOwnsTransaction(int id, string userID)
+        {
+            return Context.Transactions.Where(t => t.TransactionID == id && t.UserID == userID).Any();
+        }
     }
 }

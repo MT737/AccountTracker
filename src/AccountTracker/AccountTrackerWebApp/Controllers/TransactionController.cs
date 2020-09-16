@@ -98,7 +98,7 @@ namespace AccountTrackerWebApp.Controllers
             var userID = User.Identity.GetUserId();
             Transaction transaction = _transactionRepository.Get((int)id, userID, true);
             
-            //Confirm transaction exists.
+            //Confirm transaction exists. This doubles as ensuring that the user owns the transaction, as the object will be null if the UserID and TransactionID combo don't exist.            
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -123,8 +123,11 @@ namespace AccountTrackerWebApp.Controllers
             
             vm.TransactionOfInterest.UserID = User.Identity.GetUserId();
 
-            //TODO: protect against clients manipulating the URL. That is, confirm again that the userID and transactionID combo exists before attempting delete.
-            //___Is Owned by user.
+            //Confirm user owns the transaction
+            if (!_transactionRepository.UserOwnsTransaction(vm.TransactionOfInterest.TransactionID, vm.TransactionOfInterest.UserID))
+            {
+                return HttpNotFound();
+            }
 
             //If model state is valid, update the db and redirect to index.
             if (ModelState.IsValid)
@@ -154,7 +157,7 @@ namespace AccountTrackerWebApp.Controllers
             var userID = User.Identity.GetUserId();
             Transaction transaction = _transactionRepository.Get((int)id, userID, true);
 
-            //Confirm transaction exists.
+            //Confirm transaction exists. This doubles as ensuring that the user owns the transaction, as the object will be null if the UserID and TransactionID combo don't exist.
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -171,6 +174,14 @@ namespace AccountTrackerWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
+            var userID = User.Identity.GetUserId();
+
+            //Make sure the user owns the transaction before deleting it.
+            if (!_transactionRepository.UserOwnsTransaction(id, userID))
+            {
+                return HttpNotFound();
+            }
+
             _transactionRepository.Delete(id);
             TempData["Message"] = "Transaction successfully deleted.";
             return RedirectToAction("Index");

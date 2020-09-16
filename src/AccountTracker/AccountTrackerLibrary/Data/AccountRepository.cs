@@ -117,5 +117,16 @@ namespace AccountTrackerLibrary.Data
                 .Where(a => a.UserID == userID && a.Name.ToLower() == account.Name.ToLower() && a.AccountID != account.AccountID)
                 .Any();
         }
+
+        /// <summary>
+        /// Indicates if the user owns the specified account.
+        /// </summary>
+        /// <param name="id">Int: ID of the specified account.</param>
+        /// <param name="userID">String: User's ID.</param>
+        /// <returns></returns>
+        public bool UserOwnsAccount(int id, string userID)
+        {
+            return Context.Accounts.Where(a => a.AccountID == id && a.UserID == userID).Any();
+        }
     }
 }

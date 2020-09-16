@@ -97,6 +97,12 @@ namespace AccountTrackerWebApp.Controllers
 
             var userID = User.Identity.GetUserId();
 
+            //Confirm user owns the account.
+            if (!_accountRepository.UserOwnsAccount((int)id, userID))
+            {
+                return HttpNotFound();
+            }
+
             ViewModel vm = new ViewModel();
             vm.TransactionOfInterest = new Transaction();
             vm.AccountOfInterest = _accountRepository.Get((int)id, userID);            
@@ -114,6 +120,12 @@ namespace AccountTrackerWebApp.Controllers
                 //Validate the account
                 vm.AccountOfInterest.UserID = User.Identity.GetUserId();
                 ValidateAccount(vm.AccountOfInterest, vm.AccountOfInterest.UserID);
+
+                //Confirm user owns the account.
+                if (!_accountRepository.UserOwnsAccount(vm.AccountOfInterest.AccountID, vm.AccountOfInterest.UserID))
+                {
+                    return HttpNotFound();
+                }
 
                 if (ModelState.IsValid)
                 {
