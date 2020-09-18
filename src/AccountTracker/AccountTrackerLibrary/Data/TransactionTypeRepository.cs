@@ -1,9 +1,6 @@
 ﻿using AccountTrackerLibrary.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountTrackerLibrary.Data
 {
@@ -13,21 +10,10 @@ namespace AccountTrackerLibrary.Data
         {
         }
 
-        //TODO Implement TransType Get
-        public TransactionType Get(int id, bool includeRelatedEntities = true)
-        {
-            var transactionType = Context.TransactionTypes.AsQueryable();
-
-            if (includeRelatedEntities)
-            {
-                throw new NotImplementedException(); 
-            }
-
-            return transactionType
-                .Where(tt => tt.TransactionTypeID == id)
-                .SingleOrDefault();
-        }
-
+        /// <summary>
+        /// Returns a list of transactiontype entities.
+        /// </summary>
+        /// <returns>IList TransactionType entities.</returns>
         public IList<TransactionType> GetList()
         {
             return Context.TransactionTypes
@@ -35,11 +21,11 @@ namespace AccountTrackerLibrary.Data
                 .ToList();
         }
 
-        public int GetCount()
-        {
-            return Context.TransactionTypes.Count();
-        }
-
+        /// <summary>
+        /// Retrieves the transactionID associated to the passed transaction type name.
+        /// </summary>
+        /// <param name="name">String: Name of the transaction type.</param>
+        /// <returns>Int: Transaciton Type ID associated to the passed name.</returns>
         public int GetID(string name)
         {
             return Context.TransactionTypes

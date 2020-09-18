@@ -1,13 +1,9 @@
 ﻿using AccountTrackerLibrary.Data;
 using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 
 namespace AccountTrackerWebApp.Controllers
 {
@@ -71,7 +67,7 @@ namespace AccountTrackerWebApp.Controllers
             }
 
             //Don' allow users to edit default vendors.
-            Vendor vendor = _vendorRepository.Get((int)id, false);
+            Vendor vendor = _vendorRepository.Get((int)id);
 
             if (!vendor.IsDefault)
             {
@@ -115,7 +111,7 @@ namespace AccountTrackerWebApp.Controllers
             }
 
             //Don't allow users to delete a default vendor
-            Vendor vendorToDelete = _vendorRepository.Get((int)id, false);
+            Vendor vendorToDelete = _vendorRepository.Get((int)id);
             if (!vendorToDelete.IsDefault)
             {   
                 //Instantiate a vm to hold vendor to delete, vendor select list, and vendor to absorb.
@@ -141,8 +137,8 @@ namespace AccountTrackerWebApp.Controllers
             //Check for absorption vendor selection.
             if (vm.AbsorptionVendor.VendorID != 0)
             {
-                Vendor absorbedVendor = _vendorRepository.Get(vm.VendorOfInterest.VendorID, false);
-                Vendor absorbingVendor = _vendorRepository.Get(vm.AbsorptionVendor.VendorID, false);
+                Vendor absorbedVendor = _vendorRepository.Get(vm.VendorOfInterest.VendorID);
+                Vendor absorbingVendor = _vendorRepository.Get(vm.AbsorptionVendor.VendorID);
 
                 //Ensure that the deleted vendor is not default.
                 if (!absorbedVendor.IsDefault)
@@ -169,7 +165,7 @@ namespace AccountTrackerWebApp.Controllers
             SetErrorMessage(vm, "You must select a vendor to absorb transactions related to the vendor being deleted.", errorMessageSet);
 
             ViewModel failureStateVM = new ViewModel();
-            failureStateVM.VendorOfInterest = _vendorRepository.Get(vm.VendorOfInterest.VendorID, false);
+            failureStateVM.VendorOfInterest = _vendorRepository.Get(vm.VendorOfInterest.VendorID);
             failureStateVM.VendorSelectList = failureStateVM.InitVendorSelectList(_vendorRepository);
             return View(failureStateVM);
         }

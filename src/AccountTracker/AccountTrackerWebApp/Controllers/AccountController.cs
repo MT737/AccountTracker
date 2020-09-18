@@ -4,11 +4,8 @@ using AccountTrackerWebApp.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using static AccountTrackerWebApp.ViewModels.ViewModel;
 
 namespace AccountTrackerWebApp.Controllers
@@ -49,9 +46,13 @@ namespace AccountTrackerWebApp.Controllers
             //Instantiate an empty ViewModel
             ViewModel vm = new ViewModel();
 
+            var userID = User.Identity.GetUserId();
+
             //Instantiate an empty AccountOfInterest property of the VM
             vm.AccountOfInterest = new Account();
+            vm.AccountOfInterest.UserID = userID;
             vm.TransactionOfInterest = new Transaction();
+            vm.TransactionOfInterest.UserID = userID;
 
             //Call the view and pass the VM.
             return View(vm);
@@ -65,6 +66,7 @@ namespace AccountTrackerWebApp.Controllers
             {
                 //Validate the new account
                 vm.AccountOfInterest.UserID = User.Identity.GetUserId();
+                vm.TransactionOfInterest.UserID = User.Identity.GetUserId();
                 ValidateAccount(vm.AccountOfInterest, vm.AccountOfInterest.UserID);
 
                 //Confirm valid modelstate
@@ -107,6 +109,8 @@ namespace AccountTrackerWebApp.Controllers
             vm.TransactionOfInterest = new Transaction();
             vm.AccountOfInterest = _accountRepository.Get((int)id, userID);            
             vm.TransactionOfInterest.Amount = _accountRepository.GetBalance((int)id, userID, vm.AccountOfInterest.IsAsset);
+            vm.TransactionOfInterest.UserID = userID;
+            vm.AccountOfInterest.UserID = userID;
 
             return View(vm);
         }
@@ -119,6 +123,7 @@ namespace AccountTrackerWebApp.Controllers
             {
                 //Validate the account
                 vm.AccountOfInterest.UserID = User.Identity.GetUserId();
+                vm.TransactionOfInterest.UserID = User.Identity.GetUserId();
                 ValidateAccount(vm.AccountOfInterest, vm.AccountOfInterest.UserID);
 
                 //Confirm user owns the account.
@@ -157,19 +162,12 @@ namespace AccountTrackerWebApp.Controllers
 
             return View(vm);
         }
-
-        //Leaving the schafolding here, but not going to currently allow users to delete an account in order to maintain transaction data integrity.
-        //public ActionResult Delete(int? id)
-        //{
-        //    return HttpNotFound();
-        //}
-
-        //[HttpPost]
-        //public ActionResult Delete(int id)
-        //{
-        //    return HttpNotFound();
-        //}
-
+        
+        /// <summary>
+        /// Performs basic validation on the account entity being added and edited.
+        /// </summary>
+        /// <param name="accountOfInterest">Account: account entity being added or edited.</param>
+        /// <param name="userID">String: userID of the owner of the account.</param>
         private void ValidateAccount(Account accountOfInterest, string userID)
         {
             //New or updated Accounts cannot have the same name as currently existing accounts (except for the same account if editing).
@@ -179,6 +177,11 @@ namespace AccountTrackerWebApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Fills the transaction information required when adding or editing a transaction.
+        /// </summary>
+        /// <param name="vm">ViewModel: viewmodel entity containing the required transaction and account information.</param>
+        /// <param name="newAccount">Bool: indication as to if the account is new.</param>
         private void CompleteAccountTransaction(ViewModel vm, bool newAccount)
         {
             vm.TransactionOfInterest.AccountID = _accountRepository.GetID(vm.AccountOfInterest.Name, vm.AccountOfInterest.UserID);
@@ -207,6 +210,11 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the dashboard controller as well. Put in a central location (DRY).
+        /// <summary>
+        /// Retrieves a list of accounts with associated balances.
+        /// </summary>
+        /// <param name="userID">String: userID for which to return account balances.</param>
+        /// <returns>IList of AccountWithBalance entities.</returns>
         private IList<AccountWithBalance> GetAccountWithBalances(string userID)
         {
             //Get list of accounts

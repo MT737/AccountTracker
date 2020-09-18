@@ -13,6 +13,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <!--TODO: Research better way to pass ID back to controller.-->
     @Html.HiddenFor(m => m.CategoryOfInterest.CategoryID)
 

@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm()) 
 {
+    @Html.AntiForgeryToken()
     <!--TODO: Issue - validation summary showing even when there's no issues-->
     @Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
     

@@ -8,11 +8,13 @@
     
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <!--TODO: Research better way to pass transaction ID back to controller.-->
     @Html.HiddenFor(m => m.TransactionOfInterest.TransactionID)
+    @Html.HiddenFor(m => m.TransactionOfInterest.UserID)
 
     <!--TODO: Issue - Validation Summary is showing even when there're no issues-->
-@Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
+    @Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
 
     @Html.Partial("_TransactionForm")
     

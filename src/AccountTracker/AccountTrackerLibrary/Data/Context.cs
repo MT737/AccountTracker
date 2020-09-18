@@ -1,18 +1,10 @@
 ﻿using AccountTrackerLibrary.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountTrackerLibrary.Data
 {
-    /// <summary>
-    /// Entity Framework context class.
-    /// </summary>
     public class Context : IdentityDbContext<User>
     {
         public DbSet<Account> Accounts { get; set; }
@@ -24,8 +16,7 @@ namespace AccountTrackerLibrary.Data
         public Context() : base("Context")
         {
         }
-        
-
+    
         /// <summary>
         /// Adjusting model build conventions to fit application needs.
         /// </summary>

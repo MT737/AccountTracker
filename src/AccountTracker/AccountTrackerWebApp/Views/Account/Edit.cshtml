@@ -8,6 +8,10 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.TransactionOfInterest.UserID)
+    @Html.HiddenFor(m => m.AccountOfInterest.UserID)
+
     <!--TODO: Research better way to pass transaction ID back to controller.-->
     @Html.HiddenFor(m => m.AccountOfInterest.AccountID)
 

@@ -8,6 +8,9 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.TransactionOfInterest.UserID)
+
     <!--TODO: Issue - Validation Summary is showing even when there're no issues-->
     @Html.ValidationSummary("The following errors were found:", new { @class = "alert - alert-danger" })
 

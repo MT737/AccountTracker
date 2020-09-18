@@ -1,13 +1,9 @@
 ﻿using AccountTrackerLibrary.Data;
 using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 
 namespace AccountTrackerWebApp.Controllers
 {
@@ -71,7 +67,7 @@ namespace AccountTrackerWebApp.Controllers
             }
 
             //Don't allow users to edit a default category. Should be prevented by the UI, but confirming here. 
-            Category category = _categoryRepository.Get((int)id, false);
+            Category category = _categoryRepository.Get((int)id);
             if (!category.IsDefault)
             {
                 ViewModel vm = new ViewModel();
@@ -118,7 +114,7 @@ namespace AccountTrackerWebApp.Controllers
 
             //Don't allow users to delete a default category.
             Category category = new Category();
-            category = _categoryRepository.Get((int)id, false);
+            category = _categoryRepository.Get((int)id);
 
             if (!category.IsDefault)
             {
@@ -144,8 +140,8 @@ namespace AccountTrackerWebApp.Controllers
             //Check for absorption category selection.
             if (vm.AbsorptionCategory.CategoryID != 0)
             {
-                Category absorbedCategory = _categoryRepository.Get(vm.CategoryOfInterest.CategoryID, false);
-                Category absorbingCategory = _categoryRepository.Get(vm.AbsorptionCategory.CategoryID, false);
+                Category absorbedCategory = _categoryRepository.Get(vm.CategoryOfInterest.CategoryID);
+                Category absorbingCategory = _categoryRepository.Get(vm.AbsorptionCategory.CategoryID);
 
                 //Ensure that the deleted category is not default.
                 if (!absorbedCategory.IsDefault)
@@ -172,7 +168,7 @@ namespace AccountTrackerWebApp.Controllers
             SetErrorMessage(vm, "You must select a category to absorb transactions related to the category being deleted.", errorMessageSet);
 
             ViewModel failureStateVM = new ViewModel();
-            failureStateVM.CategoryOfInterest = _categoryRepository.Get(vm.CategoryOfInterest.CategoryID, false);            
+            failureStateVM.CategoryOfInterest = _categoryRepository.Get(vm.CategoryOfInterest.CategoryID);            
             failureStateVM.CategorySelectList = failureStateVM.InitCategorySelectList(_categoryRepository);
             return View(failureStateVM);
         }

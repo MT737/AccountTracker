@@ -4,8 +4,6 @@ using AccountTrackerLibrary.Data;
 using AccountTrackerWebApp.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 
@@ -32,7 +30,6 @@ namespace AccountTrackerWebApp.Controllers
             _vendorRepository = vendorRepository;
         }
 
-        //Index page
         public ActionResult Index()
         {
             //Instantiate viewmodel
@@ -144,7 +141,6 @@ namespace AccountTrackerWebApp.Controllers
             return View(vm);
         }
 
-
         public ActionResult Delete(int? id)
         {
             //Confirm id is not null
@@ -188,6 +184,11 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the Dashboard controller as well. Put in a central location (DRY).
+        /// <summary>
+        /// Retrieves a list of transactions associated to the specified user.
+        /// </summary>
+        /// <param name="userID">String: UserID for which to pull a list of transactions.</param>
+        /// <returns>IList of Transaction objects.</returns>
         public IList<Transaction> GetTransactionsWithDetails(string userID)
         {
             //Get get a list of transactions to gain access to transaction ids

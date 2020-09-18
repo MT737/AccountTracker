@@ -1,15 +1,9 @@
-﻿using AccountTrackerLibrary;
-using AccountTrackerLibrary.Data;
+﻿using AccountTrackerLibrary.Data;
 using AccountTrackerLibrary.Models;
 using AccountTrackerWebApp.ViewModels;
 using Microsoft.AspNet.Identity;
-using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations.Infrastructure;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using static AccountTrackerWebApp.ViewModels.ViewModel;
 
 
@@ -37,7 +31,6 @@ namespace AccountTrackerWebApp.Controllers
         public ActionResult Index()
         {
             //Instantiate viewmodel
-            //TODO Create a dashbaord viewmodel.
             var vm = new ViewModel();
             var userID = User.Identity.GetUserId();
 
@@ -49,6 +42,11 @@ namespace AccountTrackerWebApp.Controllers
             return View(vm);
         }
 
+        /// <summary>
+        /// Gets a list of VendorSpending objects.
+        /// </summary>
+        /// <param name="userID">String: UserID for which to retrieve VendorSpending objects.</param>
+        /// <returns>IList VendorSpending objects.</returns>
         private IList<VendorSpending> GetVendorSpending(string userID)
         {
             IList<VendorSpending> vendorSpending = new List<VendorSpending>();
@@ -65,6 +63,11 @@ namespace AccountTrackerWebApp.Controllers
             return vendorSpending;
         }
 
+        /// <summary>
+        /// Gets a list of CategorySpending objects.
+        /// </summary>
+        /// <param name="userID">String: UserID for which to rerieve CategorySpending objects.</param>
+        /// <returns></returns>
         private IList<CategorySpending> GetCategorySpending(string userID)
         {
             IList<CategorySpending> categorySpending = new List<CategorySpending>();
@@ -82,6 +85,11 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the account controller as well. Put in a central location (DRY).
+        /// <summary>
+        /// Retrieves a list of accounts with associated balances.
+        /// </summary>
+        /// <param name="userID">String: userID for which to return account balances.</param>
+        /// <returns>IList of AccountWithBalance entities.</returns>
         private IList<AccountWithBalance> GetAccountWithBalances(string userID)
         {
             //Get list of accounts
@@ -102,6 +110,11 @@ namespace AccountTrackerWebApp.Controllers
         }
 
         //TODO: This exact method is used in the transaction controller as well. Put in a central location (DRY).
+        /// <summary>
+        /// Retrieves a list of transactions associated to the specified user.
+        /// </summary>
+        /// <param name="userID">String: UserID for which to pull a list of transactions.</param>
+        /// <returns>IList of Transaction objects.</returns>
         public IList<Transaction> GetTransactionsWithDetails(string userID)
         {
             //Get get a list of transactions to gain access to transaction ids
