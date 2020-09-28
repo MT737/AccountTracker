@@ -6,5 +6,5 @@ This web application utilizes Entity Framework, Identity, and Identity for Entit
 
 ### Known Issues and Future Intentions
 - Known Issues: Still remaining ToDos include refining the use of dependency injection (which as of now is very clunky) and refactoring for improved adherence to DRY. Also, allowing users to add, edit, and delete vendors and categories even though said items are not user specific (those tables do not have a userID FK) is incredibly dangerous. 
-- Future Intentions: For a product intending to see release, the above items (especially the issue with cross user cateogry and vendor manipulation) would need to be remedied. However, as this application is being superseeded by a 2.0 version built using .net core and Bootstrap 5, the above concerns will instead be accounted for in the design phase of the the 2.0 project.
+- Future Intentions: For a product intending to see release, the above items (especially the issue with cross user cateogry and vendor manipulation) would need to be remedied. However, as this application is being superseeded by a 2.0 version built using .net core, the above concerns will instead be accounted for in the design phase of the the 2.0 project.
 
